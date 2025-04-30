@@ -6,7 +6,7 @@ states: detect(Who, What, How), design(Who, What, How), detected(Who, What, How)
 
 constitutive_rules:
 
-1: started count-as detect(alice, n, watch(unfulfilled_count)).
+1: count-as detect(alice, n, count(unfulfilled, n)) while deadline.
 
 2: unfulfilled_count(n, Count) count-as detected(alice, n, unfulfilled_count(n, Count))  while threshold(T) & Count>T.
 
