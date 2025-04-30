@@ -36,12 +36,12 @@ public class NPLAInterpreter extends NPLInterpreter {
      */
     public void modifyNorm(String id, Literal consequence, LogicalFormula activation) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
-//        if (regulativeNorms.get(id) != null) {
-//            regulativeNorms.replace(id, norm);
-//        } else {
-//            throw new NullPointerException();
-//        }
-        //todo: (i) getter for regulativeNorms, (ii) modify regiment norms and sanction-rules
+        if (regulativeNorms.get(id) != null) {
+            regulativeNorms.replace(id, norm);
+        } else {
+            throw new NullPointerException();
+        }
+        //todo: (i) check type, (ii) modify regiment norms and sanction-rules
     }
 
     /**
@@ -49,8 +49,8 @@ public class NPLAInterpreter extends NPLInterpreter {
      * @param id the id of the norm to be removed
      */
     public void removeNorm(String id) {
-//        regulativeNorms.remove(id);
-        //todo: (i) getter for regulativeNorms, (ii) remove regiment norms and sanction-rules
+        regulativeNorms.remove(id);
+        //todo: (i) check type, (ii) remove regiment norms and sanction-rules
     }
 
 //    todo: change the norm instance
