@@ -1,0 +1,20 @@
+// This example illustrates a normative agent integrating the NPL and SAI engine
+
+mas example4 {
+
+    agent worker {
+      ag-class: adaptation.agent.ANormativeAgentSAI("src/reg/worker_norms.npl", "src/reg/worker_constitutive.sai")
+      instances: 5
+    }
+
+    agent alice {
+        ag-class: adaptation.agent.ANormativeAgentSAI("src/reg/alice_norms.npl", "src/reg/alice_constitutive.sai")
+    }
+
+    organisation org {     // the organisational entity is hello_org from spec o1.xml
+            group wpgroup: wpgroup {
+                players: alice monitor
+                         worker worker
+            }
+    }
+}
