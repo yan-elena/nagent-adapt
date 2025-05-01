@@ -1,11 +1,11 @@
 scope main {
 
-    norm n : started & play(W, worker, _)
-        -> obligation(W, n, vl(X) & X<5, `10 seconds`)
+    norm n : started & play(U, unit, _)
+        -> obligation(U, n, vl(X) & X<5, deadline)
     .
 
-    norm n1 : detect(alice, n, watch(unfulfilled_count))
-      -> obligation(alice, n1, watch(unfulfilled_count(n)), `never`)
-      .
+    norm n1 : detect(alice,n,count(unfulfilled, n))
+        -> obligation(alice, n1, unfulfilled_count(n, C) & C > T, `never`)
+     .
 
 }
