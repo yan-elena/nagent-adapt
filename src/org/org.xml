@@ -14,14 +14,14 @@
     <structural-specification>
 
         <role-definitions>
-            <role id="worker" />
             <role id="monitor" />
+            <role id="unit" />
         </role-definitions>
 
         <group-specification id="wpgroup">
             <roles>
-                <role id="worker" min="1"/>
                 <role id="monitor" min="1"/>
+                <role id="unit" min="1"/>
             </roles>
         </group-specification>
     </structural-specification>

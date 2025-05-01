@@ -2,8 +2,8 @@
 
 mas example4 {
 
-    agent worker {
-      ag-class: adaptation.agent.ANormativeAgentSAI("src/reg/worker_norms.npl", "src/reg/worker_constitutive.sai")
+    agent unit {
+      ag-class: adaptation.agent.ANormativeAgentSAI("src/reg/unit_norms.npl", "src/reg/unit_constitutive.sai")
       instances: 5
     }
 
@@ -14,7 +14,7 @@ mas example4 {
     organisation org {     // the organisational entity is hello_org from spec o1.xml
             group wpgroup: wpgroup {
                 players: alice monitor
-                         worker worker
+                         unit unit
             }
     }
 }
