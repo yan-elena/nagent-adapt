@@ -2,6 +2,7 @@ package adaptation.agent;
 
 import jason.asSemantics.CircumstanceListener;
 import jason.asSemantics.Event;
+import jason.asSyntax.Atom;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Trigger;
 import jason.mas2j.AgentParameters;
@@ -20,6 +21,7 @@ import sai.norms.npl.npl2sai.Npl2Sai;
 import util.NPLMonitor;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -81,36 +83,35 @@ public class NormativeAgentSAI extends NormativeAg implements CircumstanceListen
     // Each change in the belief base generates an event
     @Override
     public void eventAdded(Event e) {
-        //System.out.println("eventAdded:  " + e);
-        Trigger trigger = e.getTrigger();
-        Literal event = trigger.getLiteral();
-        Trigger.TEType type = trigger.getType();
-        boolean isEnvFact = event.getSources().stream().noneMatch(s -> s.toString().equals("np") || s.toString().equals("npli"));
+        final Trigger trigger = e.getTrigger();
+        final Literal event = trigger.getLiteral();
+        final Trigger.TEType type = trigger.getType();
+        boolean isNpliFact = event.getSources().stream().anyMatch(s -> s.toString().equals("npli"));
+
+        if (isNpliFact) {
+            Literal consequence = ((Literal) event.getTerm(0)).clearAnnots();
+            event.setTerm(0, consequence);
+        }
 
         if (type.equals(Trigger.TEType.belief)) {
-                // filter the institutional facts created by npl and sai
-                if (isEnvFact) {
-                    Trigger.TEOperator operator = trigger.getOperator();
-                    try {
-                        if (operator.equals(Trigger.TEOperator.add)) {
-                            // a new belief or a perception is added as environmental property in SAI
-                            saiEngine.addEnvironmentalProperty(event);
-                        } else if (operator.equals(Trigger.TEOperator.del)) {
-                            // when the belief is removed, then remove it also as brute fact
-                            saiEngine.removeEnvironmentalProperty(event);
-                        }
-                    } catch (Exception ex) {
-                        throw new RuntimeException(ex);
-                    }
-                }
-        } else if (type.equals(Trigger.TEType.signal)) {
-            if (isEnvFact) {
-                try {
-                    // when the agent receives a signal event, add as brute fact
+            final Trigger.TEOperator operator = trigger.getOperator();
+            try {
+                if (operator.equals(Trigger.TEOperator.add)) {
+                    // a new belief or a perception is added as environmental property in SAI
                     saiEngine.addEnvironmentalProperty(event);
-                } catch (Exception ex) {
-                    throw new RuntimeException(ex);
+                } else if (operator.equals(Trigger.TEOperator.del)) {
+                    // when the belief is removed, then remove it also as brute fact
+                    saiEngine.addEnvironmentalProperty(event);
                 }
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        } else if (type.equals(Trigger.TEType.signal)) {
+            try {
+                // when the agent receives a signal event, add as environment event
+                saiEngine.addEnvironmentalEvent(event, new Atom(String.valueOf(event.getSources().get(0))), LocalDateTime.now());
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         }
 
@@ -126,66 +127,5 @@ public class NormativeAgentSAI extends NormativeAg implements CircumstanceListen
         sai_constitutiveListenerImpl constExtractor = new sai_constitutiveListenerImpl(saiEngine.getProgram());
         walker.walk(constExtractor, tree);
     }
-
-//todo: load npl norms according to sai norms ??  --> needed because npl norms and sai norms are not compatible in the
-// deadline condition
-
-//    private void loadNPLProgram(String nplProgram) {
-//        NormativeProgram p = new NormativeProgram();
-//
-//        File f = new File(nplProgram);
-//        try {
-//            if (f.exists()) {
-//                new nplp(new FileReader(nplProgram)).program(p, null);
-//            } else {
-//                new nplp(new StringReader(nplProgram)).program(p, null);
-//            }
-//        } catch (FileNotFoundException e) {
-//        } catch (ParseException e) {
-//            logger.warning("error parsing \n"+nplProgram);
-//            e.printStackTrace();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        /* The following piece of code is introduced in this artifact to convert Npl norms in SAI compliant NPL Nomrs */
-//        Iterator<INorm> it = p.getRoot().getNorms().iterator(); //get the norms to be loaded in the NPL Interpreter
-//        List<String> toRemove = new ArrayList<String>();
-//        List<INorm> toAdd = new ArrayList<INorm>();
-//        int i=0;
-//        while(it.hasNext()) { // for each norm...
-//            INorm n = it.next();
-//            try {
-//                //create a SAI compliant norm
-//                NormSai nSai = new NormSai("nSai" + ++i, n.getConsequence(), n.getCondition(), saiEngine.getProgram());
-//                for(Literal l:n.ifUnfulfilledSanction()) nSai.addUnfulfilledSanction(l);
-//                for(Literal l:n.ifInactiveSanction()) nSai.addInactiveSanction(l);
-//                for(Literal l:n.ifFulfilledSanction()) nSai.addFulfilledSanction(l);
-//                //remove the original norm from the NPL interpreter
-//                toRemove.add(n.getId());
-//                //replace the original norm by a SAI compliant one
-//                toAdd.add(nSai);
-//            } catch (jason.asSyntax.parser.ParseException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//
-//        for(String r:toRemove) {
-//            p.getRoot().removeNorm(r);
-//        }
-//
-//        for(INorm a:toAdd) {
-//            try {
-//                p.getRoot().addNorm(a);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//
-////        npl2Sai.loadNP(p.getRoot());
-//    }
 
 }
