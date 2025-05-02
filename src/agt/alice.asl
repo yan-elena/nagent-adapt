@@ -10,12 +10,11 @@
         .broadcast(tell, deadline);
         .
 
-+vl(X)[source(U)] : vls(V1) & units(U1)
++vl(X)[source(U)] : vls(V1) & units(U1) & sum(S1)
     <-  .print("received ", vl(X), " from: ", U);
-        .print(vls(V1));
         .concat(V1, [X], V2);
         -+vls(V2);
-        .print(vls(V2));
+        -+sum(S1+X);
         .concat(U1, [U], U2);
         -+units(U2);
         .
@@ -23,6 +22,7 @@
 +vl(X)[source(U)]
     <-  .print("received ", vl(X), " from: ", U);
         +vls([X]);
+        +sum(X);
         +units([U]);
         .
 
@@ -37,20 +37,21 @@
     <-  .print("DESIGN-FACT: ", design(Who, What, How));
         .
 
-+!designed(n, new_vl(X))
++!designed(n, new_vl(X)) : vls(Vls) & sum(S)
     <-  .print("DESIGN PLAN: ", designed(n, new_vl(X)));
-
+        .length(Vls,M);
+        +designed(n, new_vl(S/M));
+        .print(designed(n, new_vl(S/M)));
         .
 
 +!designed(n, new_unit(U)) : vls(Vls) & units(Us)
     <-  .print("DESIGN PLAN: ", designed(n, new_unit(U)));
-        .print("values: ", Vls, " units: ", Us);
         .max(Vls, MAX);
         .nth(ID,Vls,MAX);
-        .print("Max V: ", MAX, " ID: ", ID);
         .nth(ID,Us,UM);
-        .print("Max V from unit ", UM);
-        +new_unit(UM);
+        .print("Max V: ", MAX, " from unit ", UM);
+        +designed(n, new_unit(UM));
+        .print(designed(n, new_unit(UM)));
         .
 
 +!manage_clock : focusing(Clock,clock,_,_,_,_)
