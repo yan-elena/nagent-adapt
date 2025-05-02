@@ -4,7 +4,12 @@ scope main {
         -> obligation(U, n, vl(X)[source(U)] & X<5, deadline)
     .
 
-    norm ndes : design(Who, n, modify(vl))
-        -> obligation(Who, ndes, designed(n, vl(X)), `2 minutes`)
+    norm des1 : design(Who, n, modify(vl))
+        -> obligation(Who, des1, designed(n, new_vl(X)), `2 minutes`)
     .
+
+    norm des2 : design(Who, n, reassign(vl))
+        -> obligation(Who, des2, designed(n, new_unit(U)), `2 minutes`)
+    .
+
 }
