@@ -8,6 +8,8 @@ constitutive_rules:
 
 1: count-as detect(alice, n, count(unfulfilled, n)) while deadline.
 
-2: unfulfilled_count(n, Count) count-as detected(alice, n, unfulfilled_count(n, Count))  while threshold(T) & Count>T.
+2: unfulfilled_count(n, Count) count-as design(alice, n, modify(vl))  while Count>3.
+
+
 
 
