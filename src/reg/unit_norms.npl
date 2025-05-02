@@ -1,7 +1,7 @@
 scope main {
 
     norm n : started & .my_name(W)
-        -> obligation(W, n, vl(X) & X<5, deadline)
+        -> obligation(W, n, vl(X) & X>5, deadline)
     .
 
 }

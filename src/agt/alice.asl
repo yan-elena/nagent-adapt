@@ -66,7 +66,7 @@ units([]).
         .
 
 +active(obligation(Ag, M, vl(X) & X>5, D))
-    <-  .print(Ag, " obliged to achieve: vl(X) & X<5");
+    <-  .print(Ag, " obliged to achieve: vl(X) & X>5");
         .wait(2000);
         .send(Ag, askOne, vl(X));
         .

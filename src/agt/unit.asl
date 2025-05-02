@@ -7,8 +7,8 @@ rangeVl(0,10).
         +started;
         .
 
-+active(obligation(Me, M, vl(X) & X<5, D)) : .my_name(Me)
-    <-  .print("active obligation to achieve ", vl(X) & X<5);
++active(obligation(Me, M, vl(X) & X>5, D)) : .my_name(Me)
+    <-  .print("active obligation to achieve ", vl(X) & X>5);
         .random(R);
         ?rangeVl(Min,Max);
         X=(R*(Max-Min))+Min;
