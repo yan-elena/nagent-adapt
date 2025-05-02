@@ -2,6 +2,7 @@
 
 +!start
     <-  .print("started");
+        !manage_clock;
         +started;
         .wait(10000);
         .print("deadline!");
@@ -11,11 +12,14 @@
 
 //+!watch(unfulfilled_count(ID))
 
-+detect(alice,n,count(unfulfilled, ID))
++detect(alice, vl(X), n)
     <-  .print("DETECT-FACT");
-        .count(unfulfilled(obligation(_,_,_,_)[created(_),norm(ID,_),unfulfilled(_)]), C);
-        +unfulfilled_count(ID, C);
-        .print("count unfulfilled...", C);
+        for (play(U, unit, _)) {
+            .send(U, askOne, vl(X));
+        }
+        //.count(unfulfilled(obligation(_,_,_,_)[created(_),norm(ID,_),unfulfilled(_)]), C);
+        //+unfulfilled_count(ID, C);
+        //.print("count unfulfilled...", C);
         .
 
 +design(Who, What, How)
@@ -26,6 +30,16 @@
     <-  .print("DESIGN PLAN");
         .
 
++!manage_clock : focusing(Clock,clock,_,_,_,_)
+    <-  setFrequency(1);
+        start;
+        .
+
++!manage_clock
+    <-  .print("waiting for sai");
+        .wait(focusing(Clock,clock,_,_,_,_));
+        !manage_clock
+        .
 
 +unfulfilled(obligation(W,S,O,D)[created(C),norm(ID,A),unfulfilled(U)])
     <-  .print("unfulfilled_count +1");
@@ -39,7 +53,6 @@
 
 +active(obligation(Ag, n, vl(X) & X<5, D))
     <-  .print(Ag, " obliged to achieve: ", What);
-        .send(Ag, askOne, vl(X), D);
         .
 
 { include("common.asl") }
