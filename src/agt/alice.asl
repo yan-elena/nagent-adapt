@@ -1,4 +1,5 @@
 vls([]).
+units([]).
 
 !start .
 
@@ -14,9 +15,12 @@ vls([]).
 
 +vl(X)[source(U)]
     <-  .print("received ", vl(X), " from: ", U);
-        ?vls(L1);
-        .concat([vl(U,X)], L1, L2);
-        -+vls(L2);
+        ?vls(V1);
+        .concat([X], V1, V2);
+        -+vls(V2);
+        ?units(U1);
+        .concat([U], U1, U2);
+        -+vls(U2);
         .
 
 +detect(alice, ID, watch(unfulfilled))
@@ -37,6 +41,12 @@ vls([]).
 
 +!designed(n, new_unit(U))
     <-  .print("DESIGN PLAN: ", designed(n, new_unit(U)));
+        ?vls(V);
+        .max(V, MAX);
+        .nth(ID,V,MAX);
+        .nth(ID,L,UM);
+        .print("Max V: ", MAX, " from unit ", UM);
+        +new_unit(UM);
         .
 
 +!manage_clock : focusing(Clock,clock,_,_,_,_)
