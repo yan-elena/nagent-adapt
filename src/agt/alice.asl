@@ -1,6 +1,3 @@
-vls([]).
-units([]).
-
 !start .
 
 +!start
@@ -13,14 +10,20 @@ units([]).
         .broadcast(tell, deadline);
         .
 
++vl(X)[source(U)] : vls(V1) & units(U1)
+    <-  .print("received ", vl(X), " from: ", U);
+        .print(vls(V1));
+        .concat(V1, [X], V2);
+        -+vls(V2);
+        .print(vls(V2));
+        .concat(U1, [U], U2);
+        -+units(U2);
+        .
+
 +vl(X)[source(U)]
     <-  .print("received ", vl(X), " from: ", U);
-        ?vls(V1);
-        .concat([X], V1, V2);
-        -+vls(V2);
-        ?units(U1);
-        .concat([U], U1, U2);
-        -+vls(U2);
+        +vls([X]);
+        +units([U]);
         .
 
 +detect(alice, ID, watch(unfulfilled))
@@ -39,13 +42,14 @@ units([]).
 
         .
 
-+!designed(n, new_unit(U))
++!designed(n, new_unit(U)) : vls(Vls) & units(Us)
     <-  .print("DESIGN PLAN: ", designed(n, new_unit(U)));
-        ?vls(V);
-        .max(V, MAX);
-        .nth(ID,V,MAX);
-        .nth(ID,L,UM);
-        .print("Max V: ", MAX, " from unit ", UM);
+        .print("values: ", Vls, " units: ", Us);
+        .max(Vls, MAX);
+        .nth(ID,Vls,MAX);
+        .print("Max V: ", MAX, " ID: ", ID);
+        .nth(ID,Us,UM);
+        .print("Max V from unit ", UM);
         +new_unit(UM);
         .
 

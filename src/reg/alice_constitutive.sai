@@ -8,9 +8,10 @@ constitutive_rules:
 
 1: count-as detect(alice, n, watch(unfulfilled)) while unfulfilled(O) .
 
-2: unfulfilled_count(n, Count) count-as design(alice, n, modify(vl))  while Count>3.
+2: unfulfilled_count(n, Count) count-as design(alice, n, reassign(vl))  while Count>0 & Count<3.
 
-3: unfulfilled_count(n, Count) count-as design(alice, n, reassign(vl))  while Count>1.
+3: unfulfilled_count(n, Count) count-as design(alice, n, modify(vl))  while Count>=3.
+
 
 
 
