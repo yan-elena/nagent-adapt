@@ -1,3 +1,5 @@
+vls([]).
+
 !start .
 
 +!start
@@ -8,6 +10,13 @@
         .print("deadline!");
         +deadline;
         .broadcast(tell, deadline);
+        .
+
++vl(X)[source(U)]
+    <-  .print("received ", vl(X), " from: ", U);
+        ?vls(L1);
+        .concat([vl(U,X)], L1, L2);
+        -+vls(L2);
         .
 
 +detect(alice, ID, watch(unfulfilled))
@@ -22,7 +31,12 @@
         .
 
 +!designed(n, new_vl(X))
-    <-  .print("DESIGN PLAN");
+    <-  .print("DESIGN PLAN: ", designed(n, new_vl(X)));
+
+        .
+
++!designed(n, new_unit(U))
+    <-  .print("DESIGN PLAN: ", designed(n, new_unit(U)));
         .
 
 +!manage_clock : focusing(Clock,clock,_,_,_,_)
@@ -36,13 +50,12 @@
         !manage_clock
         .
 
-
 +active(obligation(Me, M, What, D)) : .my_name(Me)
     <-  .print("obliged to achieve: ", What);
         !What;
         .
 
-+active(obligation(Ag, M, vl(X) & X<5, D))
++active(obligation(Ag, M, vl(X) & X>5, D))
     <-  .print(Ag, " obliged to achieve: vl(X) & X<5");
         .wait(2000);
         .send(Ag, askOne, vl(X));
