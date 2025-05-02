@@ -10,23 +10,18 @@
         .broadcast(tell, deadline);
         .
 
-//+!watch(unfulfilled_count(ID))
-
-+detect(alice, vl(X), n)
-    <-  .print("DETECT-FACT");
-        for (play(U, unit, _)) {
-            .send(U, askOne, vl(X));
-        }
-        //.count(unfulfilled(obligation(_,_,_,_)[created(_),norm(ID,_),unfulfilled(_)]), C);
-        //+unfulfilled_count(ID, C);
-        //.print("count unfulfilled...", C);
++detect(alice, ID, watch(unfulfilled))
+    <-  .print("DETECT-FACT: ", detect(alice, unfulfilled_count(ID)));
+        .count(unfulfilled(obligation(S,M,O,D)[created(_),norm(ID,_),unfulfilled(_)]), C);
+        +unfulfilled_count(O, C);
+        .print(unfulfilled_count(O, C));
         .
 
 +design(Who, What, How)
-    <-  .print("DESIGN-FACT", Who, What, How);
+    <-  .print("DESIGN-FACT: ", design(Who, What, How));
         .
 
-+!designed(n, vl(X))
++!designed(n, new_vl(X))
     <-  .print("DESIGN PLAN");
         .
 
@@ -41,18 +36,16 @@
         !manage_clock
         .
 
-+unfulfilled(obligation(W,S,O,D)[created(C),norm(ID,A),unfulfilled(U)])
-    <-  .print("unfulfilled_count +1");
-        .
 
-
-+active(obligation(Me, N, What, D)) : .my_name(Me)
++active(obligation(Me, M, What, D)) : .my_name(Me)
     <-  .print("obliged to achieve: ", What);
         !What;
         .
 
-+active(obligation(Ag, n, vl(X) & X<5, D))
-    <-  .print(Ag, " obliged to achieve: ", What);
++active(obligation(Ag, M, vl(X) & X<5, D))
+    <-  .print(Ag, " obliged to achieve: vl(X) & X<5");
+        .wait(2000);
+        .send(Ag, askOne, vl(X));
         .
 
 { include("common.asl") }
