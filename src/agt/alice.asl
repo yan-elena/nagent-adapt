@@ -37,21 +37,21 @@
     <-  .print("DESIGN-FACT: ", design(Who, What, How));
         .
 
-+!designed(n, new_vl(X)) : vls(Vls) & sum(S)
++!designed(modify, n, new_vl(X)) : vls(Vls) & sum(S)
     <-  .print("DESIGN PLAN: ", designed(n, new_vl(X)));
         .length(Vls,M);
-        +designed(n, new_vl(S/M));
-        .print(designed(n, new_vl(S/M)));
+        +designed(modify, n, new_vl(S/M));
+        .print(designed(modify, n, new_vl(S/M)));
         .
 
-+!designed(n, new_unit(U)) : vls(Vls) & units(Us)
++!designed(modify, n, new_unit(U)) : vls(Vls) & units(Us)
     <-  .print("DESIGN PLAN: ", designed(n, new_unit(U)));
         .max(Vls, MAX);
         .nth(ID,Vls,MAX);
         .nth(ID,Us,UM);
         .print("Max V: ", MAX, " from unit ", UM);
-        +designed(n, new_unit(UM));
-        .print(designed(n, new_unit(UM)));
+        +designed(modify, n, new_unit(UM));
+        .print(designed(modify, n, new_unit(UM)));
         .
 
 +!manage_clock : focusing(Clock,clock,_,_,_,_)
