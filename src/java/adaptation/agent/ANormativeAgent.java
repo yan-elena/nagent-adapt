@@ -16,4 +16,6 @@ public interface ANormativeAgent {
     NPLAInterpreter getNPLAInterpreter();
 
     Logger getLogger();
+
+    void updateSpecification();
 }

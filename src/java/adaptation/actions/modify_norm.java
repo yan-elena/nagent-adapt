@@ -25,7 +25,9 @@ public class modify_norm extends DefaultInternalAction {
         LogicalFormula condition = (LogicalFormula) args[1];
         Literal consequence = (Literal) args[2];
         ag.getLogger().info("[Action] Modify norm - id: " + id + " with condition: " + condition + " consequence: " + consequence);
+
         ag.getNPLAInterpreter().modifyNorm(id.toString(), consequence, condition);
+        ag.updateSpecification();
         ag.getNPLAInterpreter().verifyNorms();
         return true;
     }

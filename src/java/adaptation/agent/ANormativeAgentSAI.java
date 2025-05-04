@@ -10,7 +10,6 @@ import npl.INorm;
 import npl.ISanctionRule;
 import sai.main.lang.semantics.constitutiveRule.ConstitutiveRule;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,11 @@ public class ANormativeAgentSAI extends NormativeAgentSAI implements ANormativeA
     @Override
     public void initAg() {
         super.initAg();
+        this.updateSpecification();
+    }
 
+    @Override
+    public void updateSpecification() {
         try {
             //store the constitutive program as beliefs of the agent
             for (ConstitutiveRule c : saiEngine.getProgram().getConstitutiveRules()) {
