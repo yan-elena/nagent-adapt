@@ -74,7 +74,7 @@
 
 +!designedNorm(Id, object, Vl, Cond, Cons)
     <-  .print(designedNorm(Id, object, Vl, Cond, Cons));
-        ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline)); //todo: err???
+        ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline)); //todo: deadline???
         Cons = obligation(Subject, Maintenance, vl(X)[source(U)] & X>Vl, Deadline);
         .
 
@@ -88,10 +88,10 @@
 
 +!executed(N1, des(OP, new(Cond, Cons)))
     <-  .print("EXECUTE PLAN: ", executed(N1, des(OP, new(Cond, Cons))));
+        adaptation.actions.modify_norm(N1, Cond, Cons);
+        .print("executed");
+        +executed(N1, des(OP, new(Cond, Cons)));
         .
-
-
-
 
 /** Normative facts **/
 
