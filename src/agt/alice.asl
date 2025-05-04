@@ -41,39 +41,54 @@
     <-  .print("DESIGN-FACT: ", design(Who, What, How));
         .
 
++!designed(modify, n, new_subject(U))
+    <-  .print("DESIGN PLAN: ", designed(n, new_subject(U)));
+
+        !designedUnit(U2);
+        .print("designed unit: ", U2);
+
+        !designedNorm(n, subject, U2, Cond, Cons);
+        .print("designed norm: ", Cond, Cons);
+
+        +designed(modify, n, new_subject(U2));
+        .print(designed(modify, n, new_subject(U2)));
+        .
+
 +!designed(modify, n, new_object(vl(X)))
     <-  .print("DESIGN PLAN: ", designed(n, new_object(vl(X))));
 
-        !designVl(X2);
-        .print("designed vl: ", X2);
+        !designedVl(Vl);
+        .print("designed vl: ", Vl);
 
+        !designedNorm(n, object, Vl, Cond, Cons);
+        .print("designed norm: ", Cond, Cons);
         
-        +designed(modify, n, new_object(vl(X2)));
-        .print(designed(modify, n, new_object(vl(X2))));
+        +designed(modify, n, new_object(vl(Vl)));
+        .print(designed(modify, n, new_object(vl(Vl))));
         .
 
 
-+!designVl(X2) : vls(Vls) & sum(S)
++!designedVl(X2) : vls(Vls) & sum(S)
     <-  .length(Vls,M);
         math.round(S/M, X2);
         .
 
-/*
-+!designVl(X2)
-    <-  +designed(modify, n, new_object(vl(5)));
-        .print("designed vl: ", X2);
-        .
-*/
-
-+!designed(modify, n, new_subject(U)) : vls(Vls) & units(Us)
-    <-  .print("DESIGN PLAN: ", designed(n, new_subject(U)));
-        .max(Vls, MAX);
++!designedUnit(U) : vls(Vls) & units(Us)
+    <-  .max(Vls, MAX);
         .nth(ID,Vls,MAX);
-        .nth(ID,Us,UM);
-        .print("Max V: ", MAX, " from unit ", UM);
-        +designed(modify, n, new_subject(UM));
-        .print(designed(modify, n, new_subject(UM)));
+        .nth(ID,Us,U);
         .
+
++!designedNorm(Id, object, Vl, Cond, Cons)
+    <-  ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline));
+        Cons = obligation(Subject, Maintenance, vl(X)[source(U)] & X>Vl, Deadline);
+        .
+
++!designedNorm(Id, subject, U, Cond, Cons)
+    <-  ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline));
+        Cons = obligation(U, Maintenance, Object, Deadline);
+        .
+
 
 
 +!executed(des(OP,N1,new_subject(U)))
