@@ -73,19 +73,21 @@
         .
 
 +!designedNorm(Id, object, Vl, Cond, Cons)
-    <-  ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline));
+    <-  .print(designedNorm(Id, object, Vl, Cond, Cons));
+        ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline)); //todo: err???
         Cons = obligation(Subject, Maintenance, vl(X)[source(U)] & X>Vl, Deadline);
         .
 
 +!designedNorm(Id, subject, U, Cond, Cons)
-    <-  ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline));
+    <-  .print(designedNorm(Id, subject, U, Cond, Cons));
+        ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline));
         Cons = obligation(U, Maintenance, Object, Deadline);
         .
 
 /** Execute plans **/
 
 +!executed(N1, des(OP, new(Cond, Cons)))
-    <-  .print("EXECUTE PLAN");
+    <-  .print("EXECUTE PLAN: ", executed(N1, des(OP, new(Cond, Cons))));
         .
 
 
