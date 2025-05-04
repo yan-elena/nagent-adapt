@@ -8,6 +8,11 @@
         +deadline;
         .broadcast(tell, deadline);
         .
+//spec(regulative,des1,consequence(obligation(Who,design(Who,n,modify(vl)),designed(modify,n,new_object(vl(X))),"2 minutes")),condition(design(Who,n,modify(vl))))
++spec(TY,ID,COND,CONS)
+    <-  .print("SPECIFICATION: ", spec(TY,ID,COND,CONS));
+        .
+
 
 +vl(X)[source(U)] : vls(V1) & units(U1) & sum(S1)
     <-  .print("received ", vl(X), " from: ", U);
@@ -36,20 +41,28 @@
     <-  .print("DESIGN-FACT: ", design(Who, What, How));
         .
 
-+!designed(modify, n, new_object(vl(X))) : vls(Vls) & sum(S)
++!designed(modify, n, new_object(vl(X)))
     <-  .print("DESIGN PLAN: ", designed(n, new_object(vl(X))));
-        .length(Vls,M);
-        math.odd(X);
-        .math.round(S/M, R);
-        +designed(modify, n, new_object(vl(R)));
-        .print(designed(modify, n, new_object(vl(R))));
+
+        !design_vl(X2);
+        .print("designed vl: ", X2);
+
+        +designed(modify, n, new_object(vl(X2)));
+        .print(designed(modify, n, new_object(vl(X2))));
         .
 
--!designed(modify, n, new_object(vl(X)))
-    <-  .print("DESIGN PLAN: ", designed(n, new_object(vl(X))));
-        +designed(modify, n, new_object(vl(5)));
-        .print(designed(modify, n, new_object(vl(5))));
+
++!design_vl(X2) : vls(Vls) & sum(S)
+    <-  .length(Vls,M);
+        math.round(S/M, X2);
         .
+
+/*
++!design_vl(X2)
+    <-  +designed(modify, n, new_object(vl(5)));
+        .print("designed vl: ", X2);
+        .
+*/
 
 +!designed(modify, n, new_subject(U)) : vls(Vls) & units(Us)
     <-  .print("DESIGN PLAN: ", designed(n, new_subject(U)));
@@ -61,6 +74,7 @@
         .print(designed(modify, n, new_subject(UM)));
         .
 
+
 +!executed(des(OP,N1,new_subject(U)))
     <-  .print("EXECUTE PLAN: ", new_subject(U));
         !modify_norm(N1, new_object(U));
@@ -68,18 +82,19 @@
 
 +!executed(des(OP,N1,new_object(vl(X))))
     <-  .print("EXECUTE PLAN: ", new_object(vl(X)));
-        !modify_norm(N1, new_object(vl(X)));
+        ?spec(regulative, N1, Cond, Cons);
+        !modify_object(Cons, vl(X));
         .
 
-+!modify_norm(N1, new_object(U))
-    <-  ?spec(regulative, N1, Spec);
-        .print(Spec);
++!modify_object(obligation(Subject, Maintenance, Object, Deadline), vl(X))
+    <-  .print("modify object: ", Object);
         .
+
 
 
 
 +active(obligation(alice, M, executed(des(OP,N1,Ne)), D))
-    <-  .print("ACTIVE OBLIGATION EXE: ", M, " O: ", executed(des(OP,N1,Ne)));
+    <-  .print("active obligation: ", executed(des(OP,N1,Ne)));
         !executed(des(OP,N1,Ne));
         .
 
