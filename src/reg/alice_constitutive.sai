@@ -1,18 +1,18 @@
 institution_id : alice_inst .
 
 status_functions:
-states: detect(Who, What, How), design(Who, What, How), detected(Who, What, How).
+states: detect(Who, What, How), design(Who, What, How), execute(Who, What, How).
 
 
 constitutive_rules:
 
-1: count-as detect(alice, n, watch(unfulfilled)) while unfulfilled(O) .
+1: count-as detect(alice, n, watch(unfulfilled)) while unfulfilled(obligation(U, (started & play(U, unit, _)), O, deadline)) .
 
 2: unfulfilled_count(n, Count) count-as design(alice, n, reassign(vl))  while Count>0 & Count<3.
 
 3: unfulfilled_count(n, Count) count-as design(alice, n, modify(vl))  while Count>=3.
 
-4: designed(OP, N1, N2) count-as execute(alice, N1, designed(OP, N1, N2)) .
+4: designed(OP, N1, N2) count-as execute(alice, N1, des(OP,N1,N2)) .
 
 
 

@@ -37,21 +37,31 @@
     <-  .print("DESIGN-FACT: ", design(Who, What, How));
         .
 
-+!designed(modify, n, new_vl(X)) : vls(Vls) & sum(S)
-    <-  .print("DESIGN PLAN: ", designed(n, new_vl(X)));
++!designed(modify, n, new_object(vl(X))) : vls(Vls) & sum(S)
+    <-  .print("DESIGN PLAN: ", designed(n, new_object(vl(X))));
         .length(Vls,M);
         +designed(modify, n, new_vl(S/M));
         .print(designed(modify, n, new_vl(S/M)));
         .
 
-+!designed(modify, n, new_unit(U)) : vls(Vls) & units(Us)
-    <-  .print("DESIGN PLAN: ", designed(n, new_unit(U)));
+-!designed(modify, n, new_object(vl(X)))
+    <-  .print("DESIGN PLAN: ", designed(n, new_object(vl(X))));
+        +designed(modify, n, new_vl(5));
+        .print(designed(modify, n, new_vl(5)));
+        .
+
++!designed(modify, n, new_subject(U)) : vls(Vls) & units(Us)
+    <-  .print("DESIGN PLAN: ", designed(n, new_subject(U)));
         .max(Vls, MAX);
         .nth(ID,Vls,MAX);
         .nth(ID,Us,UM);
         .print("Max V: ", MAX, " from unit ", UM);
-        +designed(modify, n, new_unit(UM));
-        .print(designed(modify, n, new_unit(UM)));
+        +designed(modify, n, new_subject(UM));
+        .print(designed(modify, n, new_subject(UM)));
+        .
+
++!executed(How)
+    <-  .print("EXECUTE PLAN: ", executed(How));
         .
 
 +!manage_clock : focusing(Clock,clock,_,_,_,_)
@@ -64,6 +74,13 @@
         .wait(focusing(Clock,clock,_,_,_,_));
         !manage_clock
         .
+
+//active(obligation(alice,true,executed(des(modify,n,new_vl(6))),"2025-5-4 12:0:15"))
++active(obligation(alice, M, executed(des(OP,N1,Ne)), D))
+    <-  .print("ACTIVE OBLIGATION EXE: ", M, " O: ", executed(des(OP,N1,Ne)));
+
+        .
+
 
 +active(obligation(Me, M, What, D)) : .my_name(Me)
     <-  .print("obliged to achieve: ", What);
