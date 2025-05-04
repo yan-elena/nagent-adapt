@@ -9,7 +9,7 @@ rangeVl(0,10).
         X=(R*(Max-Min))+Min;
         .my_name(U);
         .concat(U, vl, Name);
-        makeArtifact(Name, "UnitArtifact", [X], ArtId);
+        makeArtifact(Name, "VlArtifact", [X], ArtId);
         focus(ArtId);
         +started;
         .

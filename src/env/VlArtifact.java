@@ -5,7 +5,7 @@ import cartago.OpFeedbackParam;
 
 import java.util.Random;
 
-public class UnitArtifact extends Artifact {
+public class VlArtifact extends Artifact {
 
     public static final int BOUND = 2;
     private int estimation;
