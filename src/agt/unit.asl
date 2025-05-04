@@ -4,16 +4,23 @@ rangeVl(0,10).
 
 +!start
     <-  .print("started");
+        .random(R);
+        ?rangeVl(Min,Max);
+        X=(R*(Max-Min))+Min;
+        .my_name(U);
+        .concat(U, vl, Name);
+        makeArtifact(Name, "UnitArtifact", [X], ArtId);
+        focus(ArtId);
         +started;
         .
 
 +active(obligation(Me, M, vl(X) & X>5, D)) : .my_name(Me)
     <-  .print("active obligation to achieve ", vl(X) & X>5);
-        .random(R);
-        ?rangeVl(Min,Max);
-        X=(R*(Max-Min))+Min;
-        +vl(X);
-        .print(vl(X));
+        generateVl;
+        .
+
++vl(X)
+    <-  .print("vl: ", X);
         .
 
 +unfulfilled(obligation(W,S,O,D)[norm(ID,_)])
