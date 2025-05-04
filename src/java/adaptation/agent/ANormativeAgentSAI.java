@@ -11,6 +11,8 @@ import npl.ISanctionRule;
 import sai.main.lang.semantics.constitutiveRule.ConstitutiveRule;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,13 +36,12 @@ public class ANormativeAgentSAI extends NormativeAgentSAI implements ANormativeA
             //store the constitutive program as beliefs of the agent
             for (ConstitutiveRule c : saiEngine.getProgram().getConstitutiveRules()) {
                 String id = String.valueOf(saiEngine.getProgram().getConstitutiveRules().indexOf(c));
-                Map<String, Term> structure = new HashMap<>(Map.of("x", c.getX(),
-                        "y", c.getY().getId()));
+                List<Term> structure = new LinkedList<>(List.of(c.getX(), c.getY().getId()));
                 if (c.getM() != null) {
-                    structure.put("m", c.getM());
+                    structure.add(c.getM());
                 }
                 if (c.getT() != null) {
-                    structure.put("t", c.getT());
+                    structure.add(c.getT());
                 }
                 this.addBel(normToSpecification(NormType.CONSTITUTIVE, id, structure));
             }
@@ -48,20 +49,17 @@ public class ANormativeAgentSAI extends NormativeAgentSAI implements ANormativeA
             //store the normative program as beliefs of the agent
             for (Map.Entry<String, INorm> e : getNPLAInterpreter().getRegimentedNorms().entrySet()) {
                 INorm norm = e.getValue();
-                Map<String, Term> structure = Map.of("condition", norm.getCondition(),
-                        "consequence", norm.getConsequence());
+                List<Term> structure = List.of(norm.getCondition(), norm.getConsequence());
                 this.addBel(normToSpecification(NormType.REGIMENTED, e.getKey(), structure));
             }
             for (Map.Entry<String, INorm> e : getNPLAInterpreter().getRegulativeNorms().entrySet()) {
                 INorm norm = e.getValue();
-                Map<String, Term> structure = Map.of("condition", norm.getCondition(),
-                        "consequence", norm.getConsequence());
+                List<Term> structure = List.of(norm.getCondition(), norm.getConsequence());
                 this.addBel(normToSpecification(NormType.REGULATIVE, e.getKey(), structure));
             }
             for (Map.Entry<String, ISanctionRule> e : getNPLAInterpreter().getSanctionRules().entrySet()) {
                 ISanctionRule sanction = e.getValue();
-                Map<String, Term> structure = Map.of("condition", sanction.getCondition(),
-                        "consequence", sanction.getConsequence());
+                List<Term> structure = List.of(sanction.getCondition(), sanction.getConsequence());
                 this.addBel(normToSpecification(NormType.SANCTION, e.getKey(), structure));
             }
         } catch (JasonException e) {
@@ -69,10 +67,10 @@ public class ANormativeAgentSAI extends NormativeAgentSAI implements ANormativeA
         }
     }
 
-    private Literal normToSpecification(NormType type, String id, Map<String, Term> structure) {
+    private Literal normToSpecification(NormType type, String id, List<Term> structure) {
         Literal specification = new LiteralImpl("spec");
         specification.addTerms(new LiteralImpl(type.getType()), new LiteralImpl(id));
-        structure.forEach((k,v) -> specification.addTerms(v));
+        structure.forEach(e -> specification.addTerms(e));
         return specification;
     }
 }
