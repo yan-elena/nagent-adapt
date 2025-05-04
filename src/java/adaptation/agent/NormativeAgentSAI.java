@@ -30,8 +30,8 @@ import java.util.Iterator;
  */
 public class NormativeAgentSAI extends NormativeAg implements CircumstanceListener {
 
-    private Npl2Sai npl2Sai;
-    private SaiEngine saiEngine;
+    protected Npl2Sai npl2Sai;
+    protected SaiEngine saiEngine;
 
     @Override
     public void initAg() {
