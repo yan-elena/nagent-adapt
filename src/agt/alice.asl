@@ -2,7 +2,6 @@
 
 +!start
     <-  .print("started");
-        !manage_clock;
         +started;
         .wait(10000);
         .print("deadline!");
@@ -60,30 +59,24 @@
         .print(designed(modify, n, new_subject(UM)));
         .
 
-+!executed(How)
+//des(modify, n, new_subject(U))
+//des(modify, n, new_object(vl(X)))
++!executed(des(OP,N1,new_subject(U)))
     <-  .print("EXECUTE PLAN: ", executed(How));
         .
 
-+!manage_clock : focusing(Clock,clock,_,_,_,_)
-    <-  setFrequency(1);
-        start;
-        .
+//!modify_norm(N1, new_object(U))
+//    <-  ?
 
-+!manage_clock
-    <-  .print("waiting for sai");
-        .wait(focusing(Clock,clock,_,_,_,_));
-        !manage_clock
-        .
 
-//active(obligation(alice,true,executed(des(modify,n,new_vl(6))),"2025-5-4 12:0:15"))
+
 +active(obligation(alice, M, executed(des(OP,N1,Ne)), D))
     <-  .print("ACTIVE OBLIGATION EXE: ", M, " O: ", executed(des(OP,N1,Ne)));
-
+        !executed(des(OP,N1,Ne));
         .
 
-
 +active(obligation(Me, M, What, D)) : .my_name(Me)
-    <-  .print("obliged to achieve: ", What);
+    <-  .print(Me, " obliged to achieve: ", What);
         !What;
         .
 

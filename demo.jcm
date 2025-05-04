@@ -4,16 +4,11 @@ mas example4 {
 
     agent alice {
         ag-class: adaptation.agent.ANormativeAgentSAI("src/reg/alice_norms.npl", "src/reg/alice_constitutive.sai")
-        focus: wsp.clock
     }
 
     agent unit {
       ag-class: adaptation.agent.ANormativeAgentSAI("src/reg/unit_norms.npl", "src/reg/unit_constitutive.sai")
       instances: 5
-    }
-
-    workspace wsp {
-        artifact clock : cartago.tools.Clock()
     }
 
     organisation org {     // the organisational entity is hello_org from spec o1.xml
