@@ -20,20 +20,20 @@ public class VlArtifact extends Artifact {
     @OPERATION
     void generateVl() {
         int value;
-        log("...generate vl");
+        log("...generate value");
         try {
             Thread.sleep(random.nextInt(5000));
             value = random.nextInt(estimation - BOUND, estimation + BOUND);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        log("...done");
+        log("...done: " + value);
 
-        if(hasObsProperty("vl")) {
-            ObsProperty valueObsProp = getObsProperty("vl");
+        if(hasObsProperty("value")) {
+            ObsProperty valueObsProp = getObsProperty("value");
             valueObsProp.updateValue(0, value);
         } else {
-            defineObsProperty("vl", value);
+            defineObsProperty("value", value);
         }
     }
 

@@ -39,8 +39,10 @@
 +!designed(modify, n, new_object(vl(X))) : vls(Vls) & sum(S)
     <-  .print("DESIGN PLAN: ", designed(n, new_object(vl(X))));
         .length(Vls,M);
-        +designed(modify, n, new_vl(S/M));
-        .print(designed(modify, n, new_vl(S/M)));
+        math.odd(X);
+        .math.round(S/M, R);
+        +designed(modify, n, new_vl(R));
+        .print(designed(modify, n, new_vl(R)));
         .
 
 -!designed(modify, n, new_object(vl(X)))
@@ -65,8 +67,10 @@
     <-  .print("EXECUTE PLAN: ", executed(How));
         .
 
-//!modify_norm(N1, new_object(U))
-//    <-  ?
++!modify_norm(N1, new_object(U))
+    <-  ?spec(regulative, N1, Spec);
+        .print(Spec);
+        .
 
 
 
@@ -82,8 +86,6 @@
 
 +active(obligation(Ag, M, vl(X) & X>5, D))
     <-  .print(Ag, " obliged to achieve: vl(X) & X>5");
-        .wait(2000);
-        .send(Ag, askOne, vl(X));
         .
 
 { include("common.asl") }

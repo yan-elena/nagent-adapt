@@ -19,8 +19,11 @@ rangeVl(0,10).
         generateVl;
         .
 
-+vl(X)
-    <-  .print("vl: ", X);
++value(X)
+    <-  +vl(X);
+        ?play(Ag, monitor, _);
+        .send(Ag, tell, vl(X));
+        .print(vl(X), " sent to ", Ag);
         .
 
 +unfulfilled(obligation(W,S,O,D)[norm(ID,_)])
