@@ -79,7 +79,8 @@
 +!executed(N1, des(OP, new(Cond, Cons)))
     <-  .print("EXECUTE PLAN: ", executed(N1, des(OP, new(Cond, Cons))));
         adaptation.actions.modify_norm(N1, Cond, Cons);
-        .print("executed");
+        ?spec(regulative, N1, CondNew, ConsNew);
+        .print("[EXECUTED ADAPTATION] ", spec(regulative, N1, CondNew, ConsNew));
         +executed(N1, des(OP, new(Cond, Cons)));
         .
 

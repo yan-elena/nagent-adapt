@@ -1,6 +1,6 @@
 scope main {
 
-    norm n : order(N)[source(order)] & play(U, unit, _) & N > 0
+    norm n : order(N)[source(order)] & play(U, unit, _)
         -> obligation(U, n, vl(N, X)[source(U)] & X>5, deadlineOrder(N))
     .
 
