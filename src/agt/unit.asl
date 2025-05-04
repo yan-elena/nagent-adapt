@@ -3,33 +3,33 @@ rangeVl(0,10).
 !start.
 
 +!start
-    <-  .print("started");
-        .random(R);
+    <-  .random(R);
         ?rangeVl(Min,Max);
         X=(R*(Max-Min))+Min;
         .my_name(U);
         .concat(U, vl, Name);
         makeArtifact(Name, "VlArtifact", [X], ArtId);
         focus(ArtId);
+        .print("started");
         +started;
         .
 
-+active(obligation(Me, M, vl(X) & X>5, D)) : .my_name(Me)
-    <-  .print("active obligation to achieve ", vl(X) & X>5);
++active(obligation(Me, M, O, D)) : .my_name(Me) & started
+    <-  .print("active obligation to achieve ", O);
         generateVl;
         .
 
-+value(X)
-    <-  +vl(X);
-        ?play(Ag, monitor, _);
-        .send(Ag, tell, vl(X));
-        .print(vl(X), " sent to ", Ag);
++active(obligation(Me, M, O, D)) : .my_name(Me)
+    <-  .wait(1000);
+        +active(obligation(Me, M, O, D));
         .
 
-+unfulfilled(obligation(W,S,O,D)[norm(ID,_)])
-    <-  .print("----unfulfilled obligation:  norm: ", ID).
-
-
++value(X) : order(N)
+    <-  +vl(N, X);
+        ?play(Ag, monitor, _);
+        .send(Ag, tell, vl(N, X));
+        .print(vl(N, X), " sent to ", Ag);
+        .
 
 { include("common.asl") }
 { include("$jacamo/templates/common-cartago.asl") }

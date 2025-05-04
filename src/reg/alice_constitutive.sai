@@ -6,7 +6,7 @@ states: detect(Who, What, How), design(Who, What, How), execute(Who, What, How).
 
 constitutive_rules:
 
-1: count-as detect(alice, n, watch(unfulfilled)) while unfulfilled(obligation(U, (started & play(U, unit, _)), O, deadline)) .
+1: count-as detect(alice, n, watch(unfulfilled)) while unfulfilled(obligation(U, (order(N) & play(U, unit, _) & N > 0), O, D)) .
 
 2: unfulfilled_count(n, Count) count-as design(alice, n, reassign(vl))  while Count>0 & Count<3.
 

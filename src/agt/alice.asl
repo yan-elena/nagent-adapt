@@ -1,28 +1,31 @@
 !start .
+order(0).
 
 +!start
-    <-  .print("started");
-        +started;
+    <-  ?order(N);
+        .print("started order: ", N);
+        -+order(N+1);
+        .broadcast(tell, order(N+1));
         .wait(10000);
-        .print("deadline!");
-        +deadline;
-        .broadcast(tell, deadline);
+        .print("deadline order ", N+1);
+        +deadline(N+1);
+        .broadcast(tell, deadline(N+1));
         .
 
-+vl(X)[source(U)] : vls(V1) & units(U1) & sum(S1)
-    <-  .print("received ", vl(X), " from: ", U);
++vl(N, X)[source(U)] : vls(N, V1) & units(N, U1) & sum(N, S1)
+    <-  .print("received ", vl(N, X), " from: ", U);
         .concat(V1, [X], V2);
-        -+vls(V2);
-        -+sum(S1+X);
+        -+vls(N, V2);
+        -+sum(N, S1+X);
         .concat(U1, [U], U2);
-        -+units(U2);
+        -+units(N, U2);
         .
 
-+vl(X)[source(U)]
-    <-  .print("received ", vl(X), " from: ", U);
-        +vls([X]);
-        +sum(X);
-        +units([U]);
++vl(N, X)[source(U)]
+    <-  .print("received ", vl(N, X), " from: ", U);
+        +vls(N, [X]);
+        +sum(N, X);
+        +units(N, [U]);
         .
 
 /** Detect fact **/
@@ -61,12 +64,12 @@
         +designed(modify(object), n, new(Cond, Cons));
         .
 
-+!designedObject(X2) : vls(Vls) & sum(S)
++!designedObject(X2) : vls(N, Vls) & sum(N, S)
     <-  .length(Vls,M);
         math.round(S/M, X2);
         .
 
-+!designedSubject(U) : vls(Vls) & units(Us)
++!designedSubject(U) : vls(N, Vls) & units(N, Us)
     <-  .max(Vls, MAX);
         .nth(ID,Vls,MAX);
         .nth(ID,Us,U);
@@ -75,7 +78,7 @@
 +!designedNorm(Id, object, Vl, Cond, Cons)
     <-  .print(designedNorm(Id, object, Vl, Cond, Cons));
         ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline)); //todo: deadline???
-        Cons = obligation(Subject, Maintenance, vl(X)[source(U)] & X>Vl, Deadline);
+        Cons = obligation(Subject, Maintenance, vl(N, X)[source(U)] & X>Vl, Deadline);
         .
 
 +!designedNorm(Id, subject, U, Cond, Cons)
@@ -109,8 +112,9 @@
         !What;
         .
 
-+active(obligation(Ag, M, vl(X) & X>5, D))
-    <-  .print(Ag, " obliged to achieve: vl(X) & X>5");
++active(obligation(Ag, M, O, D))
+    <-  .print(Ag, " obliged to achieve: ", O);
+        .send(Ag, signal, active(obligation(Ag, M, O, D)));
         .
 
 { include("common.asl") }

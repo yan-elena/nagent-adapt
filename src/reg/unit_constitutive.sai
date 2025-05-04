@@ -1,9 +1,0 @@
-institution_id : erin_inst .
-
-status_functions:
-states: test(X).
-
-
-constitutive_rules:
-1: count-as test(1).
-2: count-as test(2) while test(1) .

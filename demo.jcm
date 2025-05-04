@@ -7,7 +7,6 @@ mas example4 {
     }
 
     agent unit {
-      ag-class: adaptation.agent.ANormativeAgentSAI("src/reg/unit_norms.npl", "src/reg/unit_constitutive.sai")
       instances: 5
     }
 
