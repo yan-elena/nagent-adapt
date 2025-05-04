@@ -30,6 +30,8 @@
         +units([U]);
         .
 
+/** Detect fact **/
+
 +detect(alice, ID, watch(unfulfilled))
     <-  .print("DETECT-FACT: ", detect(alice, unfulfilled_count(ID)));
         .count(unfulfilled(obligation(S,M,O,D)[created(_),norm(ID,_),unfulfilled(_)]), C);
@@ -37,43 +39,39 @@
         .print(unfulfilled_count(O, C));
         .
 
-+design(Who, What, How)
-    <-  .print("DESIGN-FACT: ", design(Who, What, How));
-        .
 
-+!designed(modify, n, new_subject(U))
-    <-  .print("DESIGN PLAN: ", designed(n, new_subject(U)));
+/** Design plans **/
 
-        !designedUnit(U2);
++!designed(modify(subject), n, new(Cond, Cons))
+    <-  .print("DESIGN PLAN: ", designed(modify(subject), n, new(Cond, Cons)));
+
+        !designedSubject(U2);
         .print("designed unit: ", U2);
 
         !designedNorm(n, subject, U2, Cond, Cons);
         .print("designed norm: ", Cond, Cons);
 
-        +designed(modify, n, new_subject(U2));
-        .print(designed(modify, n, new_subject(U2)));
+        +designed(modify(subject), n, new(Cond, Cons));
         .
 
-+!designed(modify, n, new_object(vl(X)))
-    <-  .print("DESIGN PLAN: ", designed(n, new_object(vl(X))));
++!designed(modify(object), n, new(Cond, Cons))
+    <-  .print("DESIGN PLAN: ", designed(modify(object), n, new(Cond, Cons)));
 
-        !designedVl(Vl);
+        !designedObject(Vl);
         .print("designed vl: ", Vl);
 
         !designedNorm(n, object, Vl, Cond, Cons);
         .print("designed norm: ", Cond, Cons);
         
-        +designed(modify, n, new_object(vl(Vl)));
-        .print(designed(modify, n, new_object(vl(Vl))));
+        +designed(modify(object), n, new(Cond, Cons));
         .
 
-
-+!designedVl(X2) : vls(Vls) & sum(S)
++!designedObject(X2) : vls(Vls) & sum(S)
     <-  .length(Vls,M);
         math.round(S/M, X2);
         .
 
-+!designedUnit(U) : vls(Vls) & units(Us)
++!designedSubject(U) : vls(Vls) & units(Us)
     <-  .max(Vls, MAX);
         .nth(ID,Vls,MAX);
         .nth(ID,Us,U);
@@ -89,29 +87,20 @@
         Cons = obligation(U, Maintenance, Object, Deadline);
         .
 
+/** Execute plans **/
 
-
-+!executed(des(OP,N1,new_subject(U)))
-    <-  .print("EXECUTE PLAN: ", new_subject(U));
-        !modify_norm(N1, new_object(U));
-        .
-
-+!executed(des(OP,N1,new_object(vl(X))))
-    <-  .print("EXECUTE PLAN: ", new_object(vl(X)));
-        ?spec(regulative, N1, Cond, Cons);
-        !modify_object(Cons, vl(X));
-        .
-
-+!modify_object(obligation(Subject, Maintenance, Object, Deadline), vl(X))
-    <-  .print("modify object: ", Object);
++!executed(N1, des(OP, new(Cond, Cons)))
+    <-  .print("EXECUTE PLAN");
         .
 
 
 
 
-+active(obligation(alice, M, executed(des(OP,N1,Ne)), D))
+/** Normative facts **/
+
++active(obligation(alice, M, executed(N1, des(OP, new(Cond, Cons))), D))
     <-  .print("active obligation: ", executed(des(OP,N1,Ne)));
-        !executed(des(OP,N1,Ne));
+        !executed(N1, des(OP, new(Cond, Cons)));
         .
 
 +active(obligation(Me, M, What, D)) : .my_name(Me)

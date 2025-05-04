@@ -5,14 +5,14 @@ scope main {
     .
 
     norm des1 : design(Who, n, modify(vl))
-        -> obligation(Who, des1, designed(modify, n, new_object(vl(X))), `2 minutes`)
+        -> obligation(Who, des1, designed(modify(subject), n, new(Cond, Cons)), `2 minutes`)
     .
 
     norm des2 : design(Who, n, reassign(vl))
-        -> obligation(Who, des2, designed(modify, n, new_subject(U)), `2 minutes`)
+        -> obligation(Who, des2, designed(modify(object), n, new(Cond, Cons)), `2 minutes`)
     .
 
-    norm exe : execute(Who, What, des(OP,N1,N2))
-        -> obligation(Who, exe, executed(des(OP,N1,N2)), `2 minutes`)
+    norm exe : execute(Who, N1, des(OP, new(Cond, Cons)))
+        -> obligation(Who, exe, executed(N1, des(OP, new(Cond, Cons))), `2 minutes`)
     .
 }
