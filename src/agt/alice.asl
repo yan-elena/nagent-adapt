@@ -44,21 +44,22 @@
 +!designed(modify, n, new_object(vl(X)))
     <-  .print("DESIGN PLAN: ", designed(n, new_object(vl(X))));
 
-        !design_vl(X2);
+        !designVl(X2);
         .print("designed vl: ", X2);
 
+        
         +designed(modify, n, new_object(vl(X2)));
         .print(designed(modify, n, new_object(vl(X2))));
         .
 
 
-+!design_vl(X2) : vls(Vls) & sum(S)
++!designVl(X2) : vls(Vls) & sum(S)
     <-  .length(Vls,M);
         math.round(S/M, X2);
         .
 
 /*
-+!design_vl(X2)
++!designVl(X2)
     <-  +designed(modify, n, new_object(vl(5)));
         .print("designed vl: ", X2);
         .
