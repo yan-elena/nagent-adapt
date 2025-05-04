@@ -8,19 +8,17 @@ import jason.asSyntax.NumberTerm;
 import jason.asSyntax.NumberTermImpl;
 import jason.asSyntax.Term;
 
-import java.util.Iterator;
-
 /**
  * An internal action to calculate the a
  */
-public class round extends DefaultInternalAction {
+public class truncate extends DefaultInternalAction {
 
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
 
         try {
             final NumberTerm x = (NumberTerm)args[0];
-            double r = Math.round(x.solve());
+            int r = (int) x.solve();
             final NumberTerm result = new NumberTermImpl(r);
 
             return un.unifies(result, args[1]);
