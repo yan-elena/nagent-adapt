@@ -2,17 +2,30 @@
 
 mas example4 {
 
+    // normative agent with adaptation capability
     agent alice {
         ag-class: adaptation.agent.ANormativeAgentSAI("src/reg/alice_norms.npl", "src/reg/alice_constitutive.sai")
     }
 
+    // normative agent
+    agent order {
+        ag-class: adaptation.agent.NormativeAgentSAI("src/reg/order_norms.npl", "src/reg/order_constitutive.sai")
+        focus: wsp.clock
+    }
+
+    // ordinary agent
     agent unit {
       instances: 5
     }
 
+    workspace wsp {
+        artifact clock : cartago.tools.Clock()
+    }
+
     organisation org {     // the organisational entity is hello_org from spec o1.xml
             group wpgroup: wpgroup {
-                players: alice monitor
+                players: order order
+                         alice monitor
                          unit unit
             }
     }

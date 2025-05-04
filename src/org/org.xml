@@ -16,12 +16,14 @@
         <role-definitions>
             <role id="monitor" />
             <role id="unit" />
+            <role id="order" />
         </role-definitions>
 
         <group-specification id="wpgroup">
             <roles>
                 <role id="monitor" min="1"/>
                 <role id="unit" min="1"/>
+                <role id="order" min="1"/>
             </roles>
         </group-specification>
     </structural-specification>

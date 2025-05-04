@@ -1,0 +1,8 @@
+institution_id : order_inst .
+
+status_functions:
+states: order(X).
+
+
+constitutive_rules:
+1: start(N) count-as order(N) while nticks(X) & X < 100000 .

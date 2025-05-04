@@ -1,0 +1,6 @@
+scope main {
+
+    norm start: order(X)
+       -> obligation(order, true, startOrder(X), `10 seconds`).
+
+}

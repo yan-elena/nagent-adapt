@@ -1,16 +1,3 @@
-!start .
-order(0).
-
-+!start
-    <-  ?order(N);
-        .print("started order: ", N);
-        -+order(N+1);
-        .broadcast(tell, order(N+1));
-        .wait(10000);
-        .print("deadline order ", N+1);
-        +deadline(N+1);
-        .broadcast(tell, deadline(N+1));
-        .
 
 +vl(N, X)[source(U)] : vls(N, V1) & units(N, U1) & sum(N, S1)
     <-  .print("received ", vl(N, X), " from: ", U);
