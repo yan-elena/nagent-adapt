@@ -3,8 +3,13 @@ package adaptation;
 import jason.asSyntax.Literal;
 import jason.asSyntax.LogicalFormula;
 import npl.INorm;
+import npl.ISanctionRule;
 import npl.NPLFactory;
 import npl.NPLInterpreter;
+
+import java.util.Map;
+import java.util.stream.Collectors;
+
 
 /**
  * An extended NPL Interpreter -- NPL(a) that supports the adaptation of norms.
@@ -51,6 +56,19 @@ public class NPLAInterpreter extends NPLInterpreter {
     public void removeNorm(String id) {
         regulativeNorms.remove(id);
         //todo: (i) check type, (ii) remove regiment norms and sanction-rules
+    }
+
+
+    public Map<String, String> getRegulativeNormsAsString() {
+        return regulativeNorms.entrySet().stream().collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, n->n.getValue().toString()));
+    }
+
+    public Map<String, String> getRegimentedNormsAsString() {
+        return regimentedNorms.entrySet().stream().collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, n->n.getValue().toString()));
+    }
+
+    public Map<String, String> getSanctionRules() {
+        return sanctionRules.stream().collect(Collectors.toUnmodifiableMap(s->s.getTrigger().toString(), ISanctionRule::toString));
     }
 
 //    todo: change the norm instance
