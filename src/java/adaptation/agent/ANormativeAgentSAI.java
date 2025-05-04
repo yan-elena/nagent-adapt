@@ -31,26 +31,27 @@ public class ANormativeAgentSAI extends NormativeAgentSAI implements ANormativeA
         try {
             //store the constitutive program as beliefs of the agent
             for (ConstitutiveRule c : saiEngine.getProgram().getConstitutiveRules()) {
-                bb.add(normToSpecification(NormType.CONSTITUTIVE, c.toString()));
+                String id = String.valueOf(saiEngine.getProgram().getConstitutiveRules().indexOf(c));
+                bb.add(normToSpecification(NormType.CONSTITUTIVE, id, c.toString()));
             }
 
             //store the normative program as beliefs of the agent
             for (Map.Entry<String, String> e : getNPLAInterpreter().getRegimentedNormsAsString().entrySet()) {
-                bb.add(normToSpecification(NormType.REGIMENTED, e.getValue()));
+                bb.add(normToSpecification(NormType.REGIMENTED, e.getKey(), e.getValue()));
             }
             for (Map.Entry<String, String> e : getNPLAInterpreter().getRegulativeNormsAsString().entrySet()) {
-                bb.add(normToSpecification(NormType.REGULATIVE, e.getValue()));
+                bb.add(normToSpecification(NormType.REGULATIVE, e.getKey(), e.getValue()));
             }
             for (Map.Entry<String, String> e : getNPLAInterpreter().getSanctionRules().entrySet()) {
-                bb.add(normToSpecification(NormType.SANCTION, e.getValue()));
+                bb.add(normToSpecification(NormType.SANCTION, e.getKey(), e.getValue()));
             }
         } catch (JasonException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private Literal normToSpecification(NormType type, String norm) {
-        final Literal literal = new LiteralImpl("spec(" + type.getType() + "," + norm + ")");
+    private Literal normToSpecification(NormType type, String id, String norm) {
+        final Literal literal = new LiteralImpl("spec(" + type.getType() + ","  + id + "," + norm + ")");
         literal.addSource(NPAtom);
         return literal;
     }
