@@ -7,6 +7,7 @@ import npl.ISanctionRule;
 import npl.NPLFactory;
 import npl.NPLInterpreter;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -59,16 +60,16 @@ public class NPLAInterpreter extends NPLInterpreter {
     }
 
 
-    public Map<String, String> getRegulativeNormsAsString() {
-        return regulativeNorms.entrySet().stream().collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, n->n.getValue().toString()));
+    public Map<String, INorm> getRegulativeNorms() {
+        return Collections.unmodifiableMap(regulativeNorms);
     }
 
-    public Map<String, String> getRegimentedNormsAsString() {
-        return regimentedNorms.entrySet().stream().collect(Collectors.toUnmodifiableMap(Map.Entry::getKey, n->n.getValue().toString()));
+    public Map<String, INorm> getRegimentedNorms() {
+        return Collections.unmodifiableMap(regimentedNorms);
     }
 
-    public Map<String, String> getSanctionRules() {
-        return sanctionRules.stream().collect(Collectors.toUnmodifiableMap(s->s.getTrigger().toString(), ISanctionRule::toString));
+    public Map<String, ISanctionRule> getSanctionRules() {
+        return sanctionRules.stream().collect(Collectors.toUnmodifiableMap(s->s.getTrigger().toString(), s -> s));
     }
 
 //    todo: change the norm instance
