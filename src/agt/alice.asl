@@ -53,7 +53,7 @@
 
 +!designedObject(X2) : vls(N, Vls) & sum(N, S)
     <-  .length(Vls,M);
-        math.round(S/M, X2);
+        math.truncate(S/M, X2);
         .
 
 +!designedSubject(U) : vls(N, Vls) & units(N, Us)

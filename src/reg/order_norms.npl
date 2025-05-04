@@ -1,6 +1,6 @@
 scope main {
 
     norm start: order(X)
-       -> obligation(order, true, startOrder(X), `10 seconds`).
+       -> obligation(order, true, startedOrder(X), `10 seconds`).
 
 }
