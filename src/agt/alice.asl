@@ -8,11 +8,6 @@
         +deadline;
         .broadcast(tell, deadline);
         .
-//spec(regulative,des1,consequence(obligation(Who,design(Who,n,modify(vl)),designed(modify,n,new_object(vl(X))),"2 minutes")),condition(design(Who,n,modify(vl))))
-+spec(TY,ID,COND,CONS)
-    <-  .print("SPECIFICATION: ", spec(TY,ID,COND,CONS));
-        .
-
 
 +vl(X)[source(U)] : vls(V1) & units(U1) & sum(S1)
     <-  .print("received ", vl(X), " from: ", U);
@@ -97,6 +92,10 @@
 
 
 /** Normative facts **/
+
++spec(TY,ID,COND,CONS)
+    <-  .print("specification: ", spec(TY,ID,COND,CONS));
+        .
 
 +active(obligation(alice, M, executed(N1, des(OP, new(Cond, Cons))), D))
     <-  .print("active obligation: ", executed(des(OP,N1,Ne)));
