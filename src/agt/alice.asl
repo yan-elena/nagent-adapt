@@ -78,6 +78,8 @@
 
 +!executed(N1, des(OP, new(Cond, Cons)))
     <-  .print("EXECUTE PLAN: ", executed(N1, des(OP, new(Cond, Cons))));
+        //Cond = (order(N)[source(order)] & play(U, unit, _)); todo: check variables instead of _
+        //Cons = obligation(U, n, vl(N, X)[source(U)] & X>Vl, deadlineOrder(N));
         adaptation.actions.modify_norm(N1, Cond, Cons);
         ?spec(regulative, N1, CondNew, ConsNew);
         .print("[EXECUTED ADAPTATION] ", spec(regulative, N1, CondNew, ConsNew));
