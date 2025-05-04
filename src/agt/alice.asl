@@ -41,14 +41,14 @@
         .length(Vls,M);
         math.odd(X);
         .math.round(S/M, R);
-        +designed(modify, n, new_vl(R));
-        .print(designed(modify, n, new_vl(R)));
+        +designed(modify, n, new_object(vl(R)));
+        .print(designed(modify, n, new_object(vl(R))));
         .
 
 -!designed(modify, n, new_object(vl(X)))
     <-  .print("DESIGN PLAN: ", designed(n, new_object(vl(X))));
-        +designed(modify, n, new_vl(5));
-        .print(designed(modify, n, new_vl(5)));
+        +designed(modify, n, new_object(vl(5)));
+        .print(designed(modify, n, new_object(vl(5))));
         .
 
 +!designed(modify, n, new_subject(U)) : vls(Vls) & units(Us)
@@ -61,10 +61,14 @@
         .print(designed(modify, n, new_subject(UM)));
         .
 
-//des(modify, n, new_subject(U))
-//des(modify, n, new_object(vl(X)))
 +!executed(des(OP,N1,new_subject(U)))
-    <-  .print("EXECUTE PLAN: ", executed(How));
+    <-  .print("EXECUTE PLAN: ", new_subject(U));
+        !modify_norm(N1, new_object(U));
+        .
+
++!executed(des(OP,N1,new_object(vl(X))))
+    <-  .print("EXECUTE PLAN: ", new_object(vl(X)));
+        !modify_norm(N1, new_object(vl(X)));
         .
 
 +!modify_norm(N1, new_object(U))
