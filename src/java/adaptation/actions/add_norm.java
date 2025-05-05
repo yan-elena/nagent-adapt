@@ -1,6 +1,7 @@
 package adaptation.actions;
 
 import adaptation.agent.ANormativeAgent;
+import jason.JasonException;
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
 import jason.asSemantics.Unifier;
@@ -11,17 +12,29 @@ import jason.asSyntax.Term;
 
 /**
  * An internal action for add a new norm in the normative engine of the agent.
+ * The following parameters are required:
+ * +id : String, the id of the norm to be modified
+ * +condition : LogicalFormula, the condition of the modified norm
+ * +consequence : Literal, the consequence of the modified norm
  */
 public class add_norm extends DefaultInternalAction {
 
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
-        ANormativeAgent ag = (ANormativeAgent) ts.getAg();
-        StringTerm id = (StringTerm) args[0];
-        Literal consequence = (Literal) args[1];
-        LogicalFormula activation = (LogicalFormula) args[2];
-        ag.getLogger().info("[Action] Add new norm - id: " + id + " activation: " + activation + " consequence: " + consequence);
-        ag.getNPLAInterpreter().addNorm(id.getString(), consequence, activation);
-        return true;
+        try{
+            ANormativeAgent ag = (ANormativeAgent) ts.getAg();
+            StringTerm id = (StringTerm) args[0];
+            LogicalFormula condition = (LogicalFormula) args[1];
+            Literal consequence = (Literal) args[2];
+            ag.getLogger().info("[Action] Add new norm - id: " + id + " condition: " + condition + " consequence: " + consequence);
+            ag.getNPLAInterpreter().addNorm(id.getString(), consequence, condition);
+            return true;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new JasonException("The internal action 'add_norm'" + "has not received three arguments!");
+        } catch (ClassCastException e) {
+            throw new JasonException("The internal action 'add_norm" + "has received arguments with the wrong type!");
+        } catch (Exception e) {
+            throw new JasonException("Error in 'add_norm'");
+        }
     }
 }
