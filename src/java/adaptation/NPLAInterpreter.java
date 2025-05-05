@@ -91,14 +91,26 @@ public class NPLAInterpreter extends NPLInterpreter {
         sanctionRules.removeIf(s -> s.getTrigger().equals(trigger));
     }
 
+    /**
+     * Retrieves the map of regulative norms.
+     * @return an unmodifiable map
+     */
     public Map<String, INorm> getRegulativeNorms() {
         return Collections.unmodifiableMap(regulativeNorms);
     }
 
+    /**
+     * Retrieves the map of regimented norms.
+     * @return an unmodifiable map
+     */
     public Map<String, INorm> getRegimentedNorms() {
         return Collections.unmodifiableMap(regimentedNorms);
     }
 
+    /**
+     * Retrieves the map of sanction rules.
+     * @return an unmodifiable map
+     */
     public Map<String, ISanctionRule> getSanctionRules() {
         return sanctionRules.stream().collect(Collectors.toUnmodifiableMap(s->s.getTrigger().toString(), s -> s));
     }
