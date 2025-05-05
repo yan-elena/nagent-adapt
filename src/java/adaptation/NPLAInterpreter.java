@@ -25,9 +25,10 @@ public class NPLAInterpreter extends NPLInterpreter {
 
     /**
      * Adds a new regulative norm in the interpreter.
-     * @param id the id of the norm
+     *
+     * @param id          the id of the norm
      * @param consequence the failure or deontic consequence of the norm
-     * @param activation the activation condition of the norm
+     * @param activation  the activation condition of the norm
      */
     public void addNorm(String id, Literal consequence, LogicalFormula activation) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
@@ -35,11 +36,37 @@ public class NPLAInterpreter extends NPLInterpreter {
     }
 
     /**
-     * Modifies an existing regulative norm with new parameters in the interpreter.
-     * @param id the id of the existing norm
+     * Adds a new regulative norm in the interpreter.
+     *
+     * @param id          the id of the norm
      * @param consequence the failure or deontic consequence of the norm
-     * @param activation the activation condition of the norm
-     * @throws NullPointerException  if the specified id is not present in the set of norms
+     * @param activation  the activation condition of the norm
+     * @param fulfilled   the triggering sanction rule if fulfilled
+     * @param unfulfilled the triggering sanction rule if unfulfilled
+     * @param inactive    the triggering sanction rule if inactive
+     */
+    public void addNorm(String id, Literal consequence, LogicalFormula activation, Literal fulfilled, Literal unfulfilled, Literal inactive) {
+        final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
+        // check if not null and if the sanction rule is already present in the list
+        if (fulfilled != null && sanctionRules.stream().anyMatch(s -> s.getTrigger().equals(fulfilled))) {
+            norm.addFulfilledSanction(fulfilled);
+        }
+        if (unfulfilled != null && sanctionRules.stream().anyMatch(s -> s.getTrigger().equals(unfulfilled))) {
+            norm.addUnfulfilledSanction(unfulfilled);
+        }
+        if (inactive != null && sanctionRules.stream().anyMatch(s -> s.getTrigger().equals(inactive))) {
+            norm.addInactiveSanction(inactive);
+        }
+        super.addNorm(norm);
+    }
+
+    /**
+     * Modifies an existing regulative norm with new parameters in the interpreter.
+     *
+     * @param id          the id of the existing norm
+     * @param consequence the failure or deontic consequence of the norm
+     * @param activation  the activation condition of the norm
+     * @throws NullPointerException if the specified id is not present in the set of norms
      */
     public void modifyNorm(String id, Literal consequence, LogicalFormula activation) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
@@ -53,6 +80,7 @@ public class NPLAInterpreter extends NPLInterpreter {
 
     /**
      * Removes an existing regulative norm with the given id
+     *
      * @param id the id of the norm to be removed
      */
     public void removeNorm(String id) {
@@ -74,17 +102,19 @@ public class NPLAInterpreter extends NPLInterpreter {
 
     /**
      * Modifies an existing sanction rule with new parameters in the interpreter.
-     * @param trigger the id of the sanction rule
-     * @param condition the activation condition
+     *
+     * @param trigger     the id of the sanction rule
+     * @param condition   the activation condition
      * @param consequence the sanction fact
      */
     public void modifySanctionRule(Literal trigger, LogicalFormula condition, Literal consequence) throws ParseException, NoSuchElementException {
         final ISanctionRule sanctionRule = this.nplFactory.createSanctionRule(trigger, condition, consequence);
-        sanctionRules.set(sanctionRules.indexOf(sanctionRules.stream().filter(s->s.getTrigger().equals(trigger)).findAny().orElseThrow()), sanctionRule);
+        sanctionRules.set(sanctionRules.indexOf(sanctionRules.stream().filter(s -> s.getTrigger().equals(trigger)).findAny().orElseThrow()), sanctionRule);
     }
 
     /**
      * Removes an existing regulative norm with the given id
+     *
      * @param trigger the id of the sanction rule
      */
     public void removeSanctionRule(Literal trigger) {
@@ -93,6 +123,7 @@ public class NPLAInterpreter extends NPLInterpreter {
 
     /**
      * Retrieves the map of regulative norms.
+     *
      * @return an unmodifiable map
      */
     public Map<String, INorm> getRegulativeNorms() {
@@ -101,6 +132,7 @@ public class NPLAInterpreter extends NPLInterpreter {
 
     /**
      * Retrieves the map of regimented norms.
+     *
      * @return an unmodifiable map
      */
     public Map<String, INorm> getRegimentedNorms() {
@@ -109,10 +141,11 @@ public class NPLAInterpreter extends NPLInterpreter {
 
     /**
      * Retrieves the map of sanction rules.
+     *
      * @return an unmodifiable map
      */
     public Map<String, ISanctionRule> getSanctionRules() {
-        return sanctionRules.stream().collect(Collectors.toUnmodifiableMap(s->s.getTrigger().toString(), s -> s));
+        return sanctionRules.stream().collect(Collectors.toUnmodifiableMap(s -> s.getTrigger().toString(), s -> s));
     }
 
 //    todo: change the norm instance
