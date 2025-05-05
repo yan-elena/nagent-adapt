@@ -1,12 +1,12 @@
 package adaptation.actions;
 
 import adaptation.agent.ANormativeAgent;
+import jason.JasonException;
 import jason.asSemantics.DefaultInternalAction;
 import jason.asSemantics.TransitionSystem;
 import jason.asSemantics.Unifier;
 import jason.asSyntax.Literal;
 import jason.asSyntax.LogicalFormula;
-import jason.asSyntax.StringTerm;
 import jason.asSyntax.Term;
 
 /**
@@ -20,15 +20,24 @@ public class modify_norm extends DefaultInternalAction {
 
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
-        ANormativeAgent ag = (ANormativeAgent) ts.getAg();
-        Term id = args[0];
-        LogicalFormula condition = (LogicalFormula) args[1];
-        Literal consequence = (Literal) args[2];
-        ag.getLogger().info("[Action] Modify norm - id: " + id + " with condition: " + condition + " consequence: " + consequence);
+        try {
+            ANormativeAgent ag = (ANormativeAgent) ts.getAg();
+            Term id = args[0];
+            LogicalFormula condition = (LogicalFormula) args[1];
+            Literal consequence = (Literal) args[2];
 
-        ag.getNPLAInterpreter().modifyNorm(id.toString(), consequence, condition);
-        ag.updateSpecification();
-        ag.getNPLAInterpreter().verifyNorms();
-        return true;
+            ag.getLogger().info("[Action] Modify norm - id: " + id + " with condition: " + condition + " consequence: " + consequence);
+
+            ag.getNPLAInterpreter().modifyNorm(id.toString(), consequence, condition);
+            ag.updateSpecification();
+            ag.getNPLAInterpreter().verifyNorms();
+            return true;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new JasonException("The internal action 'modify_norm'" + "has not received three arguments!");
+        } catch (ClassCastException e) {
+            throw new JasonException("The internal action 'modify_norm" + "has received arguments with the wrong type!");
+        } catch (Exception e) {
+            throw new JasonException("Error in 'modify_norm'");
+        }
     }
 }
