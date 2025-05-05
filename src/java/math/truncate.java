@@ -9,7 +9,7 @@ import jason.asSyntax.NumberTermImpl;
 import jason.asSyntax.Term;
 
 /**
- * An internal action to calculate the a
+ * An internal action to truncate a double value to an integer.
  */
 public class truncate extends DefaultInternalAction {
 
