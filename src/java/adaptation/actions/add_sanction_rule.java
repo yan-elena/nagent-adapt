@@ -16,7 +16,7 @@ import jason.asSyntax.Term;
  * +condition : LogicalFormula, the condition of the new norm to be added
  * +consequence : Literal, the consequence of the new norm to be added
  */
-public class add_sanction extends DefaultInternalAction {
+public class add_sanction_rule extends DefaultInternalAction {
 
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
