@@ -17,7 +17,7 @@
 
 /** Detect fact **/
 
-+detect(alice, ID, watch(unfulfilled))
++detect(alice, ID, count(unfulfilled(ID)))
     <-  .print("DETECT-FACT: ", detect(alice, unfulfilled_count(ID)));
         .count(unfulfilled(obligation(S,M,O,D)[created(_),norm(ID,_),unfulfilled(_)]), C);
         +unfulfilled_count(O, C);
