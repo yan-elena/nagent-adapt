@@ -28,6 +28,8 @@ public class add_norm extends DefaultInternalAction {
             Literal consequence = (Literal) args[2];
             ag.getLogger().info("[Action] Add new norm - id: " + id + " condition: " + condition + " consequence: " + consequence);
             ag.getNPLAInterpreter().addNorm(id.getString(), consequence, condition);
+            ag.updateSpecification();
+            ag.getNPLAInterpreter().verifyNorms();
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new JasonException("The internal action 'add_norm'" + "has not received three arguments!");

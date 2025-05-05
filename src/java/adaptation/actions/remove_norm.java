@@ -22,6 +22,8 @@ public class remove_norm extends DefaultInternalAction {
             StringTerm id = (StringTerm) args[0];
             ag.getLogger().info("[Action] Remove norm - id: " + id);
             ag.getNPLAInterpreter().removeNorm(id.getString());
+            ag.updateSpecification();
+            ag.getNPLAInterpreter().verifyNorms();
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {
             throw new JasonException("The internal action 'remove_norm'" + "has not received three arguments!");
