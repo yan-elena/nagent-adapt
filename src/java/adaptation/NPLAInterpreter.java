@@ -6,11 +6,12 @@ import npl.INorm;
 import npl.ISanctionRule;
 import npl.NPLFactory;
 import npl.NPLInterpreter;
+import npl.parser.ParseException;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-
 
 /**
  * An extended NPL Interpreter -- NPL(a) that supports the adaptation of norms.
@@ -23,7 +24,7 @@ public class NPLAInterpreter extends NPLInterpreter {
     }
 
     /**
-     * Adds a new norm in the interpreter.
+     * Adds a new regulative norm in the interpreter.
      * @param id the id of the norm
      * @param consequence the failure or deontic consequence of the norm
      * @param activation the activation condition of the norm
@@ -34,7 +35,7 @@ public class NPLAInterpreter extends NPLInterpreter {
     }
 
     /**
-     * Modifies an existing norm with new parameters in the interpreter.
+     * Modifies an existing regulative norm with new parameters in the interpreter.
      * @param id the id of the existing norm
      * @param consequence the failure or deontic consequence of the norm
      * @param activation the activation condition of the norm
@@ -51,7 +52,7 @@ public class NPLAInterpreter extends NPLInterpreter {
     }
 
     /**
-     * Removes the norm with the given id
+     * Removes an existing regulative norm with the given id
      * @param id the id of the norm to be removed
      */
     public void removeNorm(String id) {
@@ -59,6 +60,36 @@ public class NPLAInterpreter extends NPLInterpreter {
         //todo: (i) check type, (ii) remove regiment norms and sanction-rules
     }
 
+    /**
+     * Adds a new sanction rule in the interpreter.
+     *
+     * @param trigger     the id of the sanction rule
+     * @param condition   the activation condition
+     * @param consequence the sanction fact
+     */
+    public void addSanctionRule(Literal trigger, LogicalFormula condition, Literal consequence) throws ParseException {
+        final ISanctionRule sanctionRule = this.nplFactory.createSanctionRule(trigger, condition, consequence);
+        sanctionRules.add(sanctionRule);
+    }
+
+    /**
+     * Modifies an existing sanction rule with new parameters in the interpreter.
+     * @param trigger the id of the sanction rule
+     * @param condition the activation condition
+     * @param consequence the sanction fact
+     */
+    public void modifySanctionRule(Literal trigger, LogicalFormula condition, Literal consequence) throws ParseException, NoSuchElementException {
+        final ISanctionRule sanctionRule = this.nplFactory.createSanctionRule(trigger, condition, consequence);
+        sanctionRules.set(sanctionRules.indexOf(sanctionRules.stream().filter(s->s.getTrigger().equals(trigger)).findAny().orElseThrow()), sanctionRule);
+    }
+
+    /**
+     * Removes an existing regulative norm with the given id
+     * @param trigger the id of the sanction rule
+     */
+    public void removeSanctionRule(Literal trigger) {
+        sanctionRules.removeIf(s -> s.getTrigger().equals(trigger));
+    }
 
     public Map<String, INorm> getRegulativeNorms() {
         return Collections.unmodifiableMap(regulativeNorms);
