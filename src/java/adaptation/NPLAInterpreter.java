@@ -9,6 +9,7 @@ import npl.parser.ParseException;
 import java.util.Collections;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -38,13 +39,13 @@ public class NPLAInterpreter extends NPLInterpreter {
      *
      * @param id          the id of the norm
      * @param consequence the failure or deontic consequence of the norm
-     * @param activation  the activation condition of the norm
+     * @param condition   the condition of the norm
      * @param fulfilled   the triggering sanction rule if fulfilled
      * @param unfulfilled the triggering sanction rule if unfulfilled
      * @param inactive    the triggering sanction rule if inactive
      */
-    public void addNorm(String id, Literal consequence, LogicalFormula activation, Literal fulfilled, Literal unfulfilled, Literal inactive) {
-        final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
+    public void addNorm(String id, Literal consequence, LogicalFormula condition, Literal fulfilled, Literal unfulfilled, Literal inactive) {
+        final INorm norm = this.nplFactory.createNorm(id, consequence, condition);
         // check if not null and if the sanction rule is already present in the list
         if (fulfilled != null && sanctionRules.stream().anyMatch(s -> s.getTrigger().equals(fulfilled))) {
             norm.addFulfilledSanction(fulfilled);
@@ -64,7 +65,7 @@ public class NPLAInterpreter extends NPLInterpreter {
      * @param specification the id of the norm
      */
     public void addNorm(String specification) throws Exception {
-        super.addNorm(this.nplFactory.parseNorm(specification, null));
+        super.addNorm(parseNorm(specification));
     }
 
     /**
@@ -91,7 +92,7 @@ public class NPLAInterpreter extends NPLInterpreter {
      * @param specification the new norm
      */
     public void modifyNorm(String id, String specification) throws Exception {
-        super.addNorm(this.nplFactory.parseNorm(specification, null));
+        super.addNorm(parseNorm(specification));
         this.removeNorm(id);
     }
 
@@ -177,6 +178,12 @@ public class NPLAInterpreter extends NPLInterpreter {
         return sanctionRules.stream().collect(Collectors.toUnmodifiableMap(s -> s.getTrigger().toString(), s -> s));
     }
 
+
+    private INorm parseNorm(String specification) throws Exception {
+        Pattern pattern = Pattern.compile("(?<![a-z])_(\\d+)");
+        String norm = pattern.matcher(specification).replaceAll("Var$1");
+        return this.nplFactory.parseNorm(norm, null);
+    }
 
 //    todo: change the norm instance
 //    /**
