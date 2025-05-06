@@ -63,13 +63,13 @@
         .
 
 +!designedNorm(Id, object, Vl, Cond, Cons)
-    <-  .print(designedNorm(Id, object, Vl, Cond, Cons));
+    <-  .print("Designed object: ", designedNorm(Id, object, U, Cond, Cons));
         ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline)); //todo: deadline???
         Cons = obligation(Subject, Maintenance, vl(N, X)[source(U)] & X>Vl, Deadline);
         .
 
 +!designedNorm(Id, subject, U, Cond, Cons)
-    <-  .print(designedNorm(Id, subject, U, Cond, Cons));
+    <-  .print("Designed subject: ", designedNorm(Id, subject, U, Cond, Cons));
         ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline));
         Cons = obligation(U, Maintenance, Object, Deadline);
         .
@@ -80,7 +80,10 @@
     <-  .print("EXECUTE PLAN: ", executed(N1, des(OP, new(Cond, Cons))));
         //Cond = (order(N)[source(order)] & play(U, unit, _)); todo: check variables instead of _
         //Cons = obligation(U, n, vl(N, X)[source(U)] & X>Vl, deadlineOrder(N));
-        adaptation.actions.modify_norm(N1, Cond, Cons);
+
+        .concat("norm ", N1, " : ", Cond, " -> ", Cons, " .", Norm);
+
+        adaptation.actions.modify_norm(N1, Norm);
         ?spec(regulative, N1, CondNew, ConsNew);
         .print("[EXECUTED ADAPTATION] ", spec(regulative, N1, CondNew, ConsNew));
         +executed(N1, des(OP, new(Cond, Cons)));
