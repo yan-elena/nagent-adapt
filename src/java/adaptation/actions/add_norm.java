@@ -30,9 +30,10 @@ public class add_norm extends DefaultInternalAction {
                 ag.getLogger().info("[Action] Add new norm - id: " + id + " condition: " + condition + " consequence: " + consequence);
                 ag.getNPLAInterpreter().addNorm(id.getString(), consequence, condition);
             } else if (args.length == 1) {
-                StringTerm norm = (StringTerm) args[0];
+                StringTerm term = (StringTerm) args[0];
+                String norm = term.toString().substring(1, term.length() - 1);
                 ag.getLogger().info("[Action] Add new " + " norm: " + norm);
-                ag.getNPLAInterpreter().addNorm(norm.getString());
+                ag.getNPLAInterpreter().addNorm(norm);
             }
             ag.updateSpecification();
             ag.getNPLAInterpreter().verifyNorms();
