@@ -1,26 +1,24 @@
 # Normative Agent with Regulation Adaptation Capability
 
-A normative BDI [JaCaMo](https://github.com/jacamo-lang/jacamo/) agent architecture integrated with [SAI](https://github.com/artificial-institutions/sai) and [NPL(s)](https://github.com/moise-lang/npl) normative engines with the adapt capability.
-
-This repository contains a prototype implementation of the regulation adaptation model for multi-agent systems.
+This repository provides a prototype implementation of a regulation adaptation model for Multi-Agent Systems (MAS), based on a normative BDI agent architecture using [JaCaMo](https://github.com/jacamo-lang/jacamo/) with the adaptation capability, and integrated with the [SAI](https://github.com/artificial-institutions/sai) and [NPL(s)](https://github.com/moise-lang/npl) normative engines.
 
 ## Extended Normative Interpreter
 
-In `src/java/adaptation` contains the extension of NPL(s) normative engine for regulation adaptation.
+The directory `src/java/adaptation` contains the extensions to the NPL(s) normative engine for regulation adaptation.
 
-The class `NPLAInterpreter` is the extended NPL(s) interpreter that provides interface for regulation adaptation by adding, modifying, and removing norms and sanctions rules.
+The class `NPLAInterpreter` is an extended NPL(s) interpreter that provides an interface for regulation adaptation by adding, modifying, and removing norms and sanctions rules.
 
 ## Extended Normative Agent Architecture
 
-In `src/java/agent` contains the normative agent architectures that integrates the normative engines for regulation adaptation.
+The directory `src/java/agent` contains the normative agent architectures integrating the normative engines for regulation adaptation.
 
-The class `ANormativeAgentNPL` is the extended Jason normative agent architecture integrated with NPL(s) that uses the extended `NPLAInterpreter` for regulation adaptation. It requires as argument a `.npl` file with specifies the norms and sanction rules for the agent. 
+The class `ANormativeAgentNPL` is the extended Jason normative agent architecture integrated with NPL(s) that uses the extended `NPLAInterpreter` for regulation adaptation. It requires as an argument a `.npl` file that specifies the norms and sanction rules for the agent. 
 
-The class `NormativeAgentSAI` is the extended Jason normative agent architecture integrated with NPL(s) and the SAI normative engine to compute also constitutive norms. It requires as argument a `.npl` file with specifies the norms and sanction rules for the agent and a `.sai` file with specifies the constitutive norms for the agent. 
+The class `NormativeAgentSAI` is the extended Jason normative agent architecture integrated with NPL(s) and the SAI normative engine to compute also constitutive norms. It requires as arguments a `.npl` file that specifies the norms and sanction rules for the agent and a `.sai` file that specifies the constitutive norms for the agent. 
 
-The class `ANormativeAgentSAI` is the extended Jason normative agent architecture integrated with NPL(s) and SAI normative engines and uses the extended `NPLAInterpreter` for regulation adaptation. It requires as argument a `.npl` file with specifies the norms and sanction rules for the agent and a `.sai` file with specifies the constitutive norms for the agent. 
+The class `ANormativeAgentSAI` is the extended Jason normative agent architecture integrated with NPL(s) and SAI normative engines and uses the extended `NPLAInterpreter` for regulation adaptation. It requires as arguments a `.npl` file that specifies the norms and sanction rules for the agent and a `.sai` file that specifies the constitutive norms for the agent. 
 
-In `src/java/actions` contains the Jason internal operations for regulation adaptation. Available operations are:
+The directory `src/java/actions` provides Jason internal operations for regulation adaptation. Available operations are:
 
 - `add_norm`
 - `add_sanction_rule`
@@ -32,21 +30,21 @@ In `src/java/actions` contains the Jason internal operations for regulation adap
 
 ## Usage
 
-To use the extended normative agent architecture in the JaCaMo project, it is required to specify the corresponding agent architecture in the `.jcm` file. For instance, to define an agent `alice` using the `ANormativeAgentSAI` architecture, define as follows:
+To use the extended normative agent architecture in a JaCaMo project, it is required to specify the corresponding agent architecture in the `.jcm` file. For example, to define an agent `alice` using the `ANormativeAgentSAI` architecture:
 
 ```
 agent alice {
     ag-class: adaptation.agent.ANormativeAgentSAI("src/reg/alice_norms.npl", "src/reg/alice_constitutive.sai")
 }
 ```
-where `src/reg/alice_norms.npl` defines the regulative norms and sanction-rules for alice and `src/reg/alice_constitutive.sai` defines the constitutive norms for alice.
+where `src/reg/alice_norms.npl` defines the regulative norms and sanction-rules and `src/reg/alice_constitutive.sai` defines the constitutive norms for the agent alice.
 
 ## Example
 
-An JaCaMo demostration example is illustrated in `demo.jcm`. To run the example, use the following commands:
+A JaCaMo demonstration example is available in the folder. See `demo.jcm` for the JaCaMo configuration. To run the example, use the following command:
 
 ```
 ./gradlew
 ````
 
-A Java version >= 21 is required.
+Note: Java version >= 21 is required.
