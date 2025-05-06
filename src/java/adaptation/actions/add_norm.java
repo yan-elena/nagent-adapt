@@ -23,11 +23,17 @@ public class add_norm extends DefaultInternalAction {
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
         try{
             ANormativeAgent ag = (ANormativeAgent) ts.getAg();
-            StringTerm id = (StringTerm) args[0];
-            LogicalFormula condition = (LogicalFormula) args[1];
-            Literal consequence = (Literal) args[2];
-            ag.getLogger().info("[Action] Add new norm - id: " + id + " condition: " + condition + " consequence: " + consequence);
-            ag.getNPLAInterpreter().addNorm(id.getString(), consequence, condition);
+            if (args.length == 3) {
+                StringTerm id = (StringTerm) args[0];
+                LogicalFormula condition = (LogicalFormula) args[1];
+                Literal consequence = (Literal) args[2];
+                ag.getLogger().info("[Action] Add new norm - id: " + id + " condition: " + condition + " consequence: " + consequence);
+                ag.getNPLAInterpreter().addNorm(id.getString(), consequence, condition);
+            } else if (args.length == 1) {
+                StringTerm norm = (StringTerm) args[0];
+                ag.getLogger().info("[Action] Add new " + " norm: " + norm);
+                ag.getNPLAInterpreter().addNorm(norm.getString());
+            }
             ag.updateSpecification();
             ag.getNPLAInterpreter().verifyNorms();
             return true;
