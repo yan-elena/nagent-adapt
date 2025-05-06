@@ -26,7 +26,6 @@ public class ANormativeAgentNPL extends NormativeAg implements ANormativeAgent {
     @Override
     public void initAg() {
         super.initAg();
-        //todo: comment to disable the npl inspector
         NPLMonitor gui = new NPLMonitor();
         try {
             gui.add("demo", interpreter);
