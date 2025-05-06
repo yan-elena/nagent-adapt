@@ -2,10 +2,8 @@ package adaptation;
 
 import jason.asSyntax.Literal;
 import jason.asSyntax.LogicalFormula;
-import npl.INorm;
-import npl.ISanctionRule;
-import npl.NPLFactory;
-import npl.NPLInterpreter;
+import jason.asSyntax.StringTerm;
+import npl.*;
 import npl.parser.ParseException;
 
 import java.util.Collections;
@@ -61,6 +59,15 @@ public class NPLAInterpreter extends NPLInterpreter {
     }
 
     /**
+     * Adds a new regulative norm in the interpreter.
+     *
+     * @param specification the id of the norm
+     */
+    public void addNorm(String specification) throws Exception {
+        super.addNorm(this.nplFactory.parseNorm(specification, null));
+    }
+
+    /**
      * Modifies an existing regulative norm with new parameters in the interpreter.
      *
      * @param id          the id of the existing norm
@@ -75,7 +82,17 @@ public class NPLAInterpreter extends NPLInterpreter {
         } else {
             throw new NullPointerException();
         }
-        //todo: (i) check type, (ii) modify regiment norms and sanction-rules
+    }
+
+    /**
+     * Adds a new regulative norm in the interpreter.
+     *
+     * @param id            the id of the norm to be replaced
+     * @param specification the new norm
+     */
+    public void modifyNorm(String id, String specification) throws Exception {
+        super.addNorm(this.nplFactory.parseNorm(specification, null));
+        this.removeNorm(id);
     }
 
     /**
@@ -85,7 +102,6 @@ public class NPLAInterpreter extends NPLInterpreter {
      */
     public void removeNorm(String id) {
         regulativeNorms.remove(id);
-        //todo: (i) check type, (ii) remove regiment norms and sanction-rules
     }
 
     /**
@@ -110,6 +126,19 @@ public class NPLAInterpreter extends NPLInterpreter {
     public void modifySanctionRule(Literal trigger, LogicalFormula condition, Literal consequence) throws ParseException, NoSuchElementException {
         final ISanctionRule sanctionRule = this.nplFactory.createSanctionRule(trigger, condition, consequence);
         sanctionRules.set(sanctionRules.indexOf(sanctionRules.stream().filter(s -> s.getTrigger().equals(trigger)).findAny().orElseThrow()), sanctionRule);
+    }
+
+    /**
+     * Adds a new regulative norm in the interpreter.
+     *
+     * @param id          the id of the norm
+     * @param consequence the failure or deontic consequence of the norm
+     * @param activation  the activation condition of the norm
+     */
+    public void addNormInstance(String id, Literal consequence, LogicalFormula activation) {
+        final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
+        //todo
+        super.addNorm(norm);
     }
 
     /**
@@ -148,6 +177,7 @@ public class NPLAInterpreter extends NPLInterpreter {
         return sanctionRules.stream().collect(Collectors.toUnmodifiableMap(s -> s.getTrigger().toString(), s -> s));
     }
 
+
 //    todo: change the norm instance
 //    /**
 //     * Add a new norm instance in the interpreter.
@@ -159,4 +189,5 @@ public class NPLAInterpreter extends NPLInterpreter {
 //        final INorm norm = getNorm(id);
 //        super.notifier.add(status, new NormInstance(getConsequence(), unifier, norm));
 //    }
+
 }
