@@ -32,7 +32,7 @@ In `src/java/actions` contains the Jason internal operations for regulation adap
 
 ## Usage
 
-To use the extended normative agent architecture in the JaCaMo project, it is required to specify the corresponding agent architecture in the `.jcm` file. For instance, to define an agent `alice` using the `ANormativeAgentSAI` architecture you can:
+To use the extended normative agent architecture in the JaCaMo project, it is required to specify the corresponding agent architecture in the `.jcm` file. For instance, to define an agent `alice` using the `ANormativeAgentSAI` architecture, define as follows:
 
 ```
 agent alice {
@@ -40,3 +40,13 @@ agent alice {
 }
 ```
 where `src/reg/alice_norms.npl` defines the regulative norms and sanction-rules for alice and `src/reg/alice_constitutive.sai` defines the constitutive norms for alice.
+
+## Example
+
+An JaCaMo demostration example is illustrated in `demo.jcm`. To run the example, use the following commands:
+
+```
+./gradlew
+````
+
+A Java version >= 21 is required.
