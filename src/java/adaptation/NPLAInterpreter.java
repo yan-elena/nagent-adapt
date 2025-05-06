@@ -9,6 +9,7 @@ import npl.NPLInterpreter;
 import npl.parser.ParseException;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
@@ -33,7 +34,7 @@ public class NPLAInterpreter extends NPLInterpreter {
      */
     public void addNorm(String id, Literal consequence, LogicalFormula activation) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
-        super.addNorm(norm);
+        this.addNorm(norm.getId(), norm.getConsequence(), norm.getCondition(), norm.ifFulfilledSanction(), norm.ifUnfulfilledSanction(), norm.ifInactiveSanction());
     }
 
     /**
@@ -46,19 +47,24 @@ public class NPLAInterpreter extends NPLInterpreter {
      * @param unfulfilled the triggering sanction rule if unfulfilled
      * @param inactive    the triggering sanction rule if inactive
      */
-    public void addNorm(String id, Literal consequence, LogicalFormula condition, Literal fulfilled, Literal unfulfilled, Literal inactive) {
+    public void addNorm(String id, Literal consequence, LogicalFormula condition, List<Literal> fulfilled, List<Literal> unfulfilled, List<Literal> inactive) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, condition);
         // check if not null and if the sanction rule is already present in the list
-        if (fulfilled != null && sanctionRules.stream().anyMatch(s -> s.getTrigger().equals(fulfilled))) {
-            norm.addFulfilledSanction(fulfilled);
+        if (fulfilled != null && !fulfilled.isEmpty() && sanctionRules.stream().anyMatch(s -> s.getTrigger().equals(fulfilled))) {
+            fulfilled.forEach(norm::addFulfilledSanction);
         }
-        if (unfulfilled != null && sanctionRules.stream().anyMatch(s -> s.getTrigger().equals(unfulfilled))) {
-            norm.addUnfulfilledSanction(unfulfilled);
+        if (unfulfilled != null && !unfulfilled.isEmpty() && sanctionRules.stream().anyMatch(s -> s.getTrigger().equals(unfulfilled))) {
+            unfulfilled.forEach(norm::addUnfulfilledSanction);
         }
-        if (inactive != null && sanctionRules.stream().anyMatch(s -> s.getTrigger().equals(inactive))) {
-            norm.addInactiveSanction(inactive);
+        if (inactive != null && !inactive.isEmpty() && sanctionRules.stream().anyMatch(s -> s.getTrigger().equals(inactive))) {
+            inactive.forEach(norm::addInactiveSanction);
         }
-        super.addNorm(norm);
+        // check if it is regulative or regimented norm
+        if (norm.getConsequence().getFunctor().equals("fail")) {
+            regimentedNorms.put(id, norm);
+        } else {
+            regulativeNorms.put(id, norm);
+        }
     }
 
     /**
@@ -67,7 +73,8 @@ public class NPLAInterpreter extends NPLInterpreter {
      * @param specification the id of the norm
      */
     public void addNorm(String specification) throws Exception {
-        super.addNorm(parseNorm(specification));
+        final INorm norm = this.parseNorm(specification);
+        this.addNorm(norm.getId(), norm.getConsequence(), norm.getCondition(), norm.ifFulfilledSanction(), norm.ifUnfulfilledSanction(), norm.ifInactiveSanction());
     }
 
     /**
@@ -80,7 +87,11 @@ public class NPLAInterpreter extends NPLInterpreter {
      */
     public void modifyNorm(String id, Literal consequence, LogicalFormula activation) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
-        if (regulativeNorms.get(id) != null) {
+        if (norm.getConsequence().getFunctor().equals("fail")) {
+            if (regimentedNorms.get(id) != null) {
+                regimentedNorms.replace(id, norm);
+            }
+        } else if (regulativeNorms.get(id) != null) {
             regulativeNorms.replace(id, norm);
         } else {
             throw new NullPointerException();
