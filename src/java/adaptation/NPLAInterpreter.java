@@ -2,8 +2,10 @@ package adaptation;
 
 import jason.asSyntax.Literal;
 import jason.asSyntax.LogicalFormula;
-import jason.asSyntax.StringTerm;
-import npl.*;
+import npl.INorm;
+import npl.ISanctionRule;
+import npl.NPLFactory;
+import npl.NPLInterpreter;
 import npl.parser.ParseException;
 
 import java.util.Collections;

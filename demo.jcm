@@ -22,7 +22,7 @@ mas example4 {
         artifact clock : cartago.tools.Clock()
     }
 
-    organisation org {     // the organisational entity is hello_org from spec o1.xml
+    organisation org {
             group wpgroup: wpgroup {
                 players: order order
                          alice monitor
