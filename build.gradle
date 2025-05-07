@@ -91,7 +91,7 @@ task uberJar(type: Jar, dependsOn: 'classes') {
     manifest {
         attributes 'Main-Class': 'jacamo.infra.JaCaMoLauncher'
     }
-    archiveBaseName = 'jacamo-sanction' // the name must start with jacamo so that jacamo...jar is found in the classpath
+    archiveBaseName = 'jacamo-adapt' // the name must start with jacamo so that jacamo...jar is found in the classpath
     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
     from (project.projectDir.absolutePath) {
         include '**/*.asl'
