@@ -15,40 +15,42 @@
         +units(N, [U]);
         .
 
++order(N)
+    <-  .print("received ", order(N));
+        .
+
 /** Detect fact **/
 
-+detect(alice, ID, count(unfulfilled(ID)))
-    <-  .print("DETECT-FACT: ", detect(alice, unfulfilled_count(ID)));
++detect(alice, ID, count(unfulfilled(order(N))))
+    <-  .print("DETECT-FACT: ", detect(alice, count(unfulfilled(order(N)))));
         .count(unfulfilled(obligation(S,M,O,D)[created(_),norm(ID,_),unfulfilled(_)]), C);
-        +unfulfilled_count(O, C);
-        .print(unfulfilled_count(O, C));
+        +unfulfilled_count(ID, N, C);
+        .print(unfulfilled_count(ID, N, C));
         .
 
 
 /** Design plans **/
 
-+!designed(modify(subject), n, new(Cond, Cons))
-    <-  .print("DESIGN PLAN: ", designed(modify(subject), n, new(Cond, Cons)));
++!designed(modify(subject, N), n, Norm)
+    <-  .print("DESIGN PLAN: ", designed(modify(subject, N), n, Norm));
 
         !designedSubject(U2);
-        .print("designed unit: ", U2);
-
         !designedNorm(n, subject, U2, Cond, Cons);
-        .print("designed norm: ", Cond, Cons);
 
-        +designed(modify(subject), n, new(Cond, Cons));
+        .concat("norm ", N1, " : ", Cond, " -> ", Cons, " .", Norm);
+        .print("designed norm: ", Norm);
+        +designed(modify(subject, N), n, Norm);
         .
 
-+!designed(modify(object), n, new(Cond, Cons))
-    <-  .print("DESIGN PLAN: ", designed(modify(object), n, new(Cond, Cons)));
++!designed(modify(object, N), n, Norm)
+    <-  .print("DESIGN PLAN by ", modify(object, N));
 
         !designedObject(Vl);
-        .print("designed vl: ", Vl);
-
         !designedNorm(n, object, Vl, Cond, Cons);
-        .print("designed norm: ", Cond, Cons);
-        
-        +designed(modify(object), n, new(Cond, Cons));
+
+        .concat("norm ", N1, " : ", Cond, " -> ", Cons, " .", Norm);
+        .print("designed norm: ", Norm);
+        +designed(modify(object, N), n, Norm);
         .
 
 +!designedObject(X2) : vls(N, Vls) & sum(N, S)
@@ -63,30 +65,23 @@
         .
 
 +!designedNorm(Id, object, Vl, Cond, Cons)
-    <-  .print("Designed object: ", designedNorm(Id, object, U, Cond, Cons));
-        ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline)); //todo: deadline???
+    <-  ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline));
         Cons = obligation(Subject, Maintenance, vl(N, X)[source(U)] & X>Vl, Deadline);
         .
 
 +!designedNorm(Id, subject, U, Cond, Cons)
-    <-  .print("Designed subject: ", designedNorm(Id, subject, U, Cond, Cons));
-        ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline));
+    <-  ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline));
         Cons = obligation(U, Maintenance, Object, Deadline);
         .
 
 /** Execute plans **/
 
-+!executed(N1, des(OP, new(Cond, Cons)))
-    <-  .print("EXECUTE PLAN: ", executed(N1, des(OP, new(Cond, Cons))));
-        //Cond = (order(N)[source(order)] & play(U, unit, _)); todo: check variables instead of _
-        //Cons = obligation(U, n, vl(N, X)[source(U)] & X>Vl, deadlineOrder(N));
-
-        .concat("norm ", N1, " : ", Cond, " -> ", Cons, " .", Norm);
-
++!executed(N1, designed(OP, Norm))
+    <-  .print("EXECUTE PLAN: ", executed(N1, designed(OP, Norm)));
         adaptation.actions.modify_norm(N1, Norm);
         ?spec(regulative, N1, CondNew, ConsNew);
         .print("[EXECUTED ADAPTATION] ", spec(regulative, N1, CondNew, ConsNew));
-        +executed(N1, des(OP, new(Cond, Cons)));
+        +executed(N1, designed(OP, Norm));
         .
 
 /** Normative facts **/
@@ -95,9 +90,9 @@
     <-  .print("specification: ", spec(TY,ID,COND,CONS));
         .
 
-+active(obligation(alice, M, executed(N1, des(OP, new(Cond, Cons))), D))
-    <-  .print("active obligation: ", executed(des(OP,N1,Ne)));
-        !executed(N1, des(OP, new(Cond, Cons)));
++active(obligation(alice, M, executed(N1, designed(OP, Norm)), D))
+    <-  .print("active obligation: ", executed(designed(OP,N1,Ne)));
+        !executed(N1, designed(OP, Norm));
         .
 
 +active(obligation(Me, M, What, D)) : .my_name(Me)

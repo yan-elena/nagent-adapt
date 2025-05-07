@@ -5,4 +5,4 @@ states: order(X).
 
 
 constitutive_rules:
-1: start(N) count-as order(N) while nticks(X) & N<8 .
+1: start(N) count-as order(N) while nticks(X) & N<5 .

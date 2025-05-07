@@ -6,13 +6,13 @@ states: detect(Who, What, How), design(Who, What, How), execute(Who, What, How).
 
 constitutive_rules:
 
-1: count-as detect(alice, n, count(unfulfilled(n))) while unfulfilled(obligation(U, (order(N) & play(U, unit, _)), O, D)) .
+1: count-as detect(alice, n, count(unfulfilled(order(N)))) while unfulfilled(obligation(U, (order(N) & play(U, unit, _)), O, D)) .
 
-2: unfulfilled_count(n, Count) count-as design(alice, n, modify(object))  while Count>0 & Count<3.
+2: unfulfilled_count(n, N, Count) count-as design(alice, n, modify(subject, N))  while Count>0 & Count<3 .
 
-3: unfulfilled_count(n, Count) count-as design(alice, n, modify(subject))  while Count>=3.
+3: unfulfilled_count(n, N, Count) count-as design(alice, n, modify(object, N))  while Count>=3 .
 
-4: designed(OP, N1, new(Cond, Cons)) count-as execute(alice, N1, des(OP, new(Cond, Cons))) .
+4: designed(OP, N1, Norm) count-as execute(alice, N1, designed(OP, Norm)) .
 
 
 

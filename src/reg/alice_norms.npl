@@ -4,15 +4,15 @@ scope main {
         -> obligation(U, n, vl(N, X)[source(U)] & X>5, deadlineOrder(N))
     .
 
-    norm des1 : design(Who, n, modify(subject))
-        -> obligation(Who, des1, designed(modify(subject), n, new(Cond, Cons)), `2 minutes`)
+    norm des1 : design(Who, n, modify(subject, N))
+        -> obligation(Who, des1, designed(modify(subject, N), n, Norm), `2 minutes`)
     .
 
-    norm des2 : design(Who, n, modify(object))
-        -> obligation(Who, des2, designed(modify(object), n, new(Cond, Cons)), `2 minutes`)
+    norm des2 : design(Who, n, modify(object, N))
+        -> obligation(Who, des2, designed(modify(object, N), n, Norm), `2 minutes`)
     .
 
-    norm exe : execute(Who, N1, des(OP, new(Cond, Cons)))
-        -> obligation(Who, exe, executed(N1, des(OP, new(Cond, Cons))), `2 minutes`)
+    norm exe : execute(Who, N1, designed(OP, Norm))
+        -> obligation(Who, exe, executed(N1, designed(OP, Norm)), `2 minutes`)
     .
 }
