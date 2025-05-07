@@ -22,7 +22,7 @@
 /** Detect fact **/
 
 +detect(alice, ID, count(unfulfilled(order(N))))
-    <-  .print("DETECT-FACT: ", detect(alice, count(unfulfilled(order(N)))));
+    <-  .print("detect fact: ", detect(alice, count(unfulfilled(order(N)))));
         .count(unfulfilled(obligation(S,M,O,D)[created(_),norm(ID,_),unfulfilled(_)]), C);
         +unfulfilled_count(ID, N, C);
         .print(unfulfilled_count(ID, N, C));
@@ -32,7 +32,7 @@
 /** Design plans **/
 
 +!designed(modify(subject, N), n, Norm)
-    <-  .print("DESIGN PLAN: ", designed(modify(subject, N), n, Norm));
+    <-  .print("design plan: ", designed(modify(subject, N), n, Norm));
 
         !designedSubject(U2);
         !designedNorm(n, subject, U2, Cond, Cons);
@@ -43,7 +43,7 @@
         .
 
 +!designed(modify(object, N), n, Norm)
-    <-  .print("DESIGN PLAN by ", modify(object, N));
+    <-  .print("design plan: ", modify(object, N));
 
         !designedObject(Vl);
         !designedNorm(n, object, Vl, Cond, Cons);
@@ -77,10 +77,8 @@
 /** Execute plans **/
 
 +!executed(N1, designed(OP, Norm))
-    <-  .print("EXECUTE PLAN: ", executed(N1, designed(OP, Norm)));
+    <-  .print("execute plan: ", executed(N1, designed(OP, Norm)));
         adaptation.actions.modify_norm(N1, Norm);
-        ?spec(regulative, N1, CondNew, ConsNew);
-        .print("[EXECUTED ADAPTATION] ", spec(regulative, N1, CondNew, ConsNew));
         +executed(N1, designed(OP, Norm));
         .
 
