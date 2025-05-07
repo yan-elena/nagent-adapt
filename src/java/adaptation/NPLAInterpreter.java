@@ -143,19 +143,6 @@ public class NPLAInterpreter extends NPLInterpreter {
     }
 
     /**
-     * Adds a new regulative norm in the interpreter.
-     *
-     * @param id          the id of the norm
-     * @param consequence the failure or deontic consequence of the norm
-     * @param activation  the activation condition of the norm
-     */
-    public void addNormInstance(String id, Literal consequence, LogicalFormula activation) {
-        final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
-        //todo
-        super.addNorm(norm);
-    }
-
-    /**
      * Removes an existing regulative norm with the given id
      *
      * @param trigger the id of the sanction rule
@@ -197,17 +184,5 @@ public class NPLAInterpreter extends NPLInterpreter {
         String norm = pattern.matcher(specification).replaceAll("Var$1");
         return this.nplFactory.parseNorm(norm, null);
     }
-
-//    todo: change the norm instance
-//    /**
-//     * Add a new norm instance in the interpreter.
-//     * @param id the id of the norm
-//     * @param consequence the failure or deontic consequence of the norm
-//     * @param activation the activation condition of the norm
-//     */
-//    public void addNormInstance(EventType status, String id, Unifier unifier) {
-//        final INorm norm = getNorm(id);
-//        super.notifier.add(status, new NormInstance(getConsequence(), unifier, norm));
-//    }
 
 }
