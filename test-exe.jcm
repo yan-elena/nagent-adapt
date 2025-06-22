@@ -1,0 +1,9 @@
+// This example illustrates a normative agent integrating the NPL and SAI engine
+
+mas example {
+
+    // normative agent with adaptation capability
+    agent executor {
+        ag-class: adaptation.agent.ANormativeAgentSAI("src/reg/test.npl", "src/reg/test.sai")
+    }
+}

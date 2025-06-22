@@ -1,0 +1,10 @@
+scope main {
+
+    norm n : order(N)
+        -> obligation(alice, n, vl(N, X) & X>5, false)
+    .
+
+    norm exe : execute(executor, NID, designed(modify, subject, X))
+        -> obligation(executor, exe, executed(executor, NID, designed(modify, subject, X)), `2 minutes`)
+    .
+}
