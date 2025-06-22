@@ -105,8 +105,8 @@ public class NPLAInterpreter extends NPLInterpreter {
      * @param specification the new norm
      */
     public void modifyNorm(String id, String specification) throws Exception {
-        super.addNorm(parseNorm(specification));
-        this.removeNorm(id);
+        final INorm norm = parseNorm(specification);
+        this.modifyNorm(id, norm.getConsequence(), norm.getCondition());
     }
 
     /**

@@ -73,7 +73,7 @@ public class ANormativeAgentSAI extends NormativeAgentSAI implements ANormativeA
     private Literal normToSpecification(NormType type, String id, List<Term> structure) {
         Literal specification = new LiteralImpl("spec");
         specification.addTerms(new LiteralImpl(type.getType()), new LiteralImpl(id));
-        structure.forEach(e -> specification.addTerms(e));
+        structure.forEach(specification::addTerms);
         return specification;
     }
 }
