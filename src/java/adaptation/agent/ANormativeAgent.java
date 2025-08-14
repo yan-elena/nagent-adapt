@@ -15,7 +15,14 @@ public interface ANormativeAgent {
      */
     NPLAInterpreter getNPLAInterpreter();
 
+    /**
+     * Retrieves the Java logger to log messages.
+     * @return the logger
+     */
     Logger getLogger();
 
+    /**
+     * Updates the normative specifications in the belief base.
+     */
     void updateSpecification();
 }
