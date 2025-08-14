@@ -4,16 +4,22 @@
 
 +!start
     <-  +order(1);
-        .wait(3000);
+        .wait(13000);
+        .print("new order...");
         -+order(2).
 
 +!executed(executor, NID, designed(modify, subject, X))
     <-  .print("EXECUTE PLAN");
         ?spec(regulative, NID, Cond, obligation(Subject, Maintenance, Object, Deadline));
+        .print("specification of ", NID, ": ", spec(regulative, NID, Cond, obligation(Subject, Maintenance, Object, Deadline)));
         Cons = obligation(X, Maintenance, Object, Deadline);
-        .print("CONS: ", Cons);
+        .print("Modifying the CONS to : ", Cons);
         .concat("norm ", NID, " : ", Cond, " -> ", Cons, " .", Norm);
         .print("Norm: ", Norm);
+        for (.range(I, 1, 10)) { // this could be input for when
+            .wait(1000);
+            .print("execute in ", 10-I, " seconds");
+        }
         adaptation.actions.modify_norm(NID, Norm);
         .print("EXECUTED ADAPTATION: ", Norm);
         +executed(ID, NID, designed(modify, subject, X)); //obligation fulfilled
