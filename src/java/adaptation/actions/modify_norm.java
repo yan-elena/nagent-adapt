@@ -38,7 +38,6 @@ public class modify_norm extends DefaultInternalAction {
                 ag.getLogger().info("[Action] Modify norm - id: " + id + " with a new norm: " + norm);
                 ag.getNPLAInterpreter().modifyNorm(id.toString(), norm);
             }
-            ag.updateSpecification();
             ag.getNPLAInterpreter().verifyNorms();
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {

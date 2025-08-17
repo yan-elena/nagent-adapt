@@ -22,7 +22,6 @@ public class remove_sanction_rule extends DefaultInternalAction {
             Literal id = (Literal) args[0];
             ag.getLogger().info("[Action] Remove sanction rule - id: " + id);
             ag.getNPLAInterpreter().removeSanctionRule(id);
-            ag.updateSpecification();
             ag.getNPLAInterpreter().verifyNorms();
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {

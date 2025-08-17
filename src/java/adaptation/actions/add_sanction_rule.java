@@ -27,7 +27,6 @@ public class add_sanction_rule extends DefaultInternalAction {
             Literal consequence = (Literal) args[2];
             ag.getLogger().info("[Action] Add new sanction rule - id: " + id + " condition: " + condition + " consequence: " + consequence);
             ag.getNPLAInterpreter().addSanctionRule(id, condition, consequence);
-            ag.updateSpecification();
             ag.getNPLAInterpreter().verifyNorms();
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {

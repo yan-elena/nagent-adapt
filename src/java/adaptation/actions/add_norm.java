@@ -35,7 +35,6 @@ public class add_norm extends DefaultInternalAction {
                 ag.getLogger().info("[Action] Add new " + " norm: " + norm);
                 ag.getNPLAInterpreter().addNorm(norm);
             }
-            ag.updateSpecification();
             ag.getNPLAInterpreter().verifyNorms();
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {

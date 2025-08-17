@@ -29,7 +29,6 @@ public class modify_sanction_rule extends DefaultInternalAction {
             ag.getLogger().info("[Action] Modify sanction rule - id: " + id + " with condition: " + condition + " consequence: " + consequence);
 
             ag.getNPLAInterpreter().modifySanctionRule(id, condition, consequence);
-            ag.updateSpecification();
             ag.getNPLAInterpreter().verifyNorms();
             return true;
         } catch (ArrayIndexOutOfBoundsException e) {
