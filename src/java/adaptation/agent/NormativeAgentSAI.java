@@ -93,6 +93,7 @@ public class NormativeAgentSAI extends NormativeAg implements CircumstanceListen
             event.setTerm(0, consequence);
         }
 
+        //todo: consider everything that is not "self"
         if (type.equals(Trigger.TEType.belief)) {
             final Trigger.TEOperator operator = trigger.getOperator();
             try {

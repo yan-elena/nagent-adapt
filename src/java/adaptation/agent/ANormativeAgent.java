@@ -22,7 +22,7 @@ public interface ANormativeAgent {
     Logger getLogger();
 
     /**
-     * Updates the normative specifications in the belief base.
+     * Load the normative specifications to the agent's belief base.
      */
-    void updateSpecification();
+    void loadSpecification();
 }
