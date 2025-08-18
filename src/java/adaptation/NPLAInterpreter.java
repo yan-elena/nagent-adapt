@@ -2,17 +2,10 @@ package adaptation;
 
 import jason.asSyntax.Literal;
 import jason.asSyntax.LogicalFormula;
-import npl.INorm;
-import npl.ISanctionRule;
-import npl.NPLFactory;
-import npl.NPLInterpreter;
+import npl.*;
 import npl.parser.ParseException;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.regex.Pattern;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -20,9 +13,19 @@ import java.util.stream.Collectors;
  */
 public class NPLAInterpreter extends NPLInterpreter {
     private final NPLFactory nplFactory;
+    private final List<NPLAListener> listeners;
 
     public NPLAInterpreter() {
         nplFactory = new NPLFactory();
+        listeners = new ArrayList<>();
+    }
+
+    /**
+     * Adds a listener for the changes in the normative norms.
+     * @param listener the NPLA listener
+     */
+    public void addListener(NPLAListener listener) {
+        this.listeners.add(listener);
     }
 
     /**
@@ -61,9 +64,11 @@ public class NPLAInterpreter extends NPLInterpreter {
         }
         // check if it is regulative or regimented norm
         if (norm.getConsequence().getFunctor().equals("fail")) {
-            regimentedNorms.put(id, norm);
+            this.regimentedNorms.put(id, norm);
+            this.listeners.forEach(l -> l.createdNorm(NormType.REGIMENTED, norm.getId(), norm.getCondition(), norm.getConsequence()));
         } else {
-            regulativeNorms.put(id, norm);
+            this.regulativeNorms.put(id, norm);
+            this.listeners.forEach(l -> l.createdNorm(NormType.REGULATIVE, norm.getId(), norm.getCondition(), norm.getConsequence()));
         }
     }
 
@@ -87,16 +92,25 @@ public class NPLAInterpreter extends NPLInterpreter {
      */
     public void modifyNorm(String id, Literal consequence, LogicalFormula activation) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
+        Optional<INorm> replaced = Optional.empty();
+        Optional<NormType> type = Optional.empty();
         if (norm.getConsequence().getFunctor().equals("fail")) {
             if (regimentedNorms.get(id) != null) {
-                regimentedNorms.replace(id, norm);
+                replaced = Optional.ofNullable(regimentedNorms.replace(id, norm));
+                type = Optional.of(NormType.REGIMENTED);
             }
         } else if (regulativeNorms.get(id) != null) {
-            regulativeNorms.replace(id, norm);
+            type = Optional.of(NormType.REGULATIVE);
+            replaced = Optional.ofNullable(regulativeNorms.replace(id, norm));
         } else {
             throw new NullPointerException();
         }
-    }
+        if (replaced.isPresent()) {
+            NormType t = type.get();
+            replaced.ifPresent(old -> this.listeners.forEach(l -> l.removedNorm(t, old.getId(), old.getCondition(), old.getConsequence())));
+            this.listeners.forEach(l -> l.createdNorm(t, norm.getId(), norm.getCondition(), norm.getConsequence()));
+        }
+        }
 
     /**
      * Adds a new regulative norm in the interpreter.
@@ -115,7 +129,8 @@ public class NPLAInterpreter extends NPLInterpreter {
      * @param id the id of the norm to be removed
      */
     public void removeNorm(String id) {
-        regulativeNorms.remove(id);
+        INorm norm = regulativeNorms.remove(id);
+        this.listeners.forEach(l -> l.removedNorm(NormType.REGULATIVE, norm.getId(), norm.getCondition(), norm.getConsequence()));
     }
 
     /**
@@ -127,6 +142,7 @@ public class NPLAInterpreter extends NPLInterpreter {
      */
     public void addSanctionRule(Literal trigger, LogicalFormula condition, Literal consequence) throws ParseException {
         final ISanctionRule sanctionRule = this.nplFactory.createSanctionRule(trigger, condition, consequence);
+        this.listeners.forEach(l -> l.createdNorm(NormType.SANCTION, sanctionRule.getTrigger().toString(), sanctionRule.getCondition(), sanctionRule.getConsequence()));
         sanctionRules.add(sanctionRule);
     }
 
@@ -178,11 +194,10 @@ public class NPLAInterpreter extends NPLInterpreter {
         return sanctionRules.stream().collect(Collectors.toUnmodifiableMap(s -> s.getTrigger().toString(), s -> s));
     }
 
-
     private INorm parseNorm(String specification) throws Exception {
-        Pattern pattern = Pattern.compile("(?<![a-z])_(\\d+)");
-        String norm = pattern.matcher(specification).replaceAll("Var$1");
-        return this.nplFactory.parseNorm(norm, null);
+//        Pattern pattern = Pattern.compile("(?<![a-z])_(\\d+)");
+//        String norm = pattern.matcher(specification).replaceAll("Var$1");
+        return this.nplFactory.parseNorm(specification.replaceAll("((_)(\\d)+(Var)?)+", "Var"), null);
     }
 
 }
