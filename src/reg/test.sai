@@ -6,4 +6,4 @@ states: execute(Who, What, How).
 
 constitutive_rules:
 
-1: count-as execute(executor, n, designed(modify, subject, bob)) .
+1: count-as execute(executor, n, designed(modify, subject, bob)) . //adaptation-required

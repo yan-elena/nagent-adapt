@@ -25,10 +25,10 @@ rangeVl(0,10).
         .
 
 +value(X) : order(N)
-    <-  +vl(N, X);
+    <-  +completed(N, X);
         ?play(Ag, monitor, _);
-        .send(Ag, tell, vl(N, X));
-        .print(vl(N, X), " sent to ", Ag);
+        .send(Ag, tell, completed(N, X));
+        .print(completed(N, X), " sent to ", Ag);
         .
 
 { include("common.asl") }

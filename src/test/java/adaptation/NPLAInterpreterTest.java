@@ -19,7 +19,7 @@ class NPLAInterpreterTest {
 
     @Test
     void testAddNorm() {
-        String specification = "norm n : order(N)[source(order)] & play(U, unit, _) -> obligation(U, n, vl(N, X)[source(U)] & X>5, deadlineOrder(N)) .";
+        String specification = "norm n : order(N)[source(order)] & play(U, unit, _) -> obligation(U, n, completed(N, X)[source(U)] & X>5, deadlineOrder(N)) .";
 
         this.addNorm(specification);
 
@@ -40,12 +40,12 @@ class NPLAInterpreterTest {
 
     @Test
     void testModifyNorm() {
-        String specification = "norm n : order(N)[source(order)] & play(U, unit, _) -> obligation(U, n, vl(N, X)[source(U)] & X>5, deadlineOrder(N)) .";
+        String specification = "norm n : order(N)[source(order)] & play(U, unit, _) -> obligation(U, n, completed(N, X)[source(U)] & X>5, deadlineOrder(N)) .";
 
         this.addNorm(specification);
 
         try {
-            nplaEngine.modifyNorm("n", "norm n : order(N)[source(order)] & play(U, unit, _) -> obligation(U, n, vl(N, X)[source(U)] & X>3, deadlineOrder(N)) .");
+            nplaEngine.modifyNorm("n", "norm n : order(N)[source(order)] & play(U, unit, _) -> obligation(U, n, completed(N, X)[source(U)] & X>3, deadlineOrder(N)) .");
 
             nplaEngine.verifyNorms();
             nplaEngine.verifyNorms();
@@ -74,7 +74,7 @@ class NPLAInterpreterTest {
 
         try {
             // norm fulfilled
-            nplaEngine.addFact(ASSyntax.parseLiteral("vl(1, 4)[source(unit1)]"));
+            nplaEngine.addFact(ASSyntax.parseLiteral("completed(1, 4)[source(unit1)]"));
 
             nplaEngine.verifyNorms();
             nplaEngine.verifyNorms();

@@ -1,6 +1,6 @@
 
-+vl(N, X)[source(U)] : vls(N, V1) & units(N, U1) & sum(N, S1)
-    <-  .print("received ", vl(N, X), " from: ", U);
++completed(N, X)[source(U)] : vls(N, V1) & units(N, U1) & sum(N, S1)
+    <-  .print("received ", completed(N, X), " from: ", U);
         .concat(V1, [X], V2);
         -+vls(N, V2);
         -+sum(N, S1+X);
@@ -8,8 +8,8 @@
         -+units(N, U2);
         .
 
-+vl(N, X)[source(U)]
-    <-  .print("received ", vl(N, X), " from: ", U);
++completed(N, X)[source(U)]
+    <-  .print("received ", completed(N, X), " from: ", U);
         +vls(N, [X]);
         +sum(N, X);
         +units(N, [U]);
@@ -66,7 +66,7 @@
 
 +!designedNorm(Id, object, Vl, Cond, Cons)
     <-  ?spec(regulative, Id, Cond, obligation(Subject, Maintenance, Object, Deadline));
-        Cons = obligation(Subject, Maintenance, vl(N, X)[source(U)] & X>Vl, Deadline);
+        Cons = obligation(Subject, Maintenance, completed(N, X)[source(U)] & X>Vl, Deadline);
         .
 
 +!designedNorm(Id, subject, U, Cond, Cons)

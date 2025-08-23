@@ -1,6 +1,6 @@
 // This example illustrates a normative agent integrating the NPL and SAI engine
 
-mas example4 {
+mas demo {
 
     // normative agent with adaptation capability
     agent alice {
