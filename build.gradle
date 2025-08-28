@@ -133,6 +133,34 @@ task uberJar(type: Jar, dependsOn: 'classes') {
     }
 }
 
+task publishMavenGitHub(dependsOn: ['publishToMavenLocal']) {
+    group "publishing"
+    doLast {
+        def wdir = System.getProperty("user.home")+'/.m2/repository/org/jacamo/nagent-adapt'
+        def rdir = System.getProperty("user.home")+'/.m2/mvn-repo'
+        exec {
+            commandLine 'git', 'pull'
+            workingDir rdir
+        }
+        copy {
+            from wdir
+            into rdir + '/org/jacamo/nagent'
+        }
+        exec {
+            commandLine 'git', 'add', '*'
+            workingDir rdir
+        }
+        exec {
+            commandLine 'git', 'commit', '-a', '-m', 'new version of nagent '+project.version
+            workingDir rdir
+        }
+        exec {
+            commandLine 'git', 'push'
+            workingDir rdir
+        }
+    }
+}
+
 clean {
     delete 'bin'
     delete 'build'
