@@ -30,7 +30,20 @@ The directory `src/java/actions` provides Jason internal operations for regulati
 
 ## Usage
 
-To use the extended normative agent architecture in a JaCaMo project, it is required to specify the corresponding agent architecture in the `.jcm` file. For example, to define an agent `alice` using the `ANormativeAgentSAI` architecture:
+To use the extended normative agent architecture in a JaCaMo project, it is required to add the following dependencies in your `build.gradle` file:
+```
+repositories {
+    maven { url "https://raw.githubusercontent.com/jacamo-lang/mvn-repo/master" }
+    maven { url "https://raw.githubusercontent.com/yan-elena/mvn-repo/refs/heads/main" }
+}
+
+dependencies {
+    implementation('org.jacamo:jacamo:1.3.0')
+    implementation('org.jacamo:nagent-adapt:1.0')
+}
+```
+
+After that, you can use the normative agent architecture in the `.jcm` file to define agents. For example, to define an agent `alice` using the `ANormativeAgentSAI` architecture:
 
 ```
 agent alice {
