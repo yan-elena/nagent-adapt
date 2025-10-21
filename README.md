@@ -10,7 +10,7 @@ The class `NPLAInterpreter` is an extended NPL(s) interpreter that provides an i
 
 ## Extended Normative Agent Architecture
 
-<img width="1676" height="1672" alt="nagent-adapt" src="https://github.com/user-attachments/assets/6c65e25d-bfe6-49bf-aaba-b01baf9738d0" />
+<img width="600" alt="nagent-adapt" src="https://github.com/user-attachments/assets/6c65e25d-bfe6-49bf-aaba-b01baf9738d0" />
 
 The directory `src/java/agent` contains the normative agent architectures integrating the normative engines for regulation adaptation.
 
