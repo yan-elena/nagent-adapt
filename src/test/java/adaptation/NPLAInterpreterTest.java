@@ -89,7 +89,7 @@ class NPLAInterpreterTest {
     private void createNorm(String specification) {
         try {
             INorm norm = nplFactory.parseNorm(specification, null);
-            nplaEngine.createNorm(norm);
+            nplaEngine.addNorm(norm);
 
             assertTrue(nplaEngine.getRegulativeNorms().containsKey("n"));
             assertEquals(1, nplaEngine.getRegulativeNorms().size());
