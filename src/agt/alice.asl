@@ -22,7 +22,7 @@
 /** Detect fact **/
 
 +detect(alice, ID, count(unfulfilled(order(N))))
-    <-  .print("detect fact: ", detect(alice, count(unfulfilled(order(N)))));
+    <-  .print("DETECT-FACT: ", detect(alice, count(unfulfilled(order(N)))));
         .count(unfulfilled(obligation(S,M,O,D)[created(_),norm(ID,_),unfulfilled(_)]), C);
         +unfulfilled_count(ID, N, C);
         .print(unfulfilled_count(ID, N, C));
@@ -31,26 +31,24 @@
 
 /** Design plans **/
 
-+!designed(modify(subject, N), n, Norm)
-    <-  .print("design plan: ", designed(modify(subject, N), n, Norm));
++!designed(modify(subject, N), ID, modified(Cond, Cons))
+    <-  .print("DESIGN PLAN: ", designed(modify(subject, N), ID, Norm));
 
         !designedSubject(U2);
         !designedNorm(n, subject, U2, Cond, Cons);
 
-        .concat("norm ", N1, " : ", Cond, " -> ", Cons, " .", Norm);
-        .print("designed norm: ", Norm);
-        +designed(modify(subject, N), n, Norm);
+        .print("designed: ", modified(Cond, Cons));
+        +designed(modify(subject, N), ID, modified(Cond, Cons));
         .
 
-+!designed(modify(object, N), n, Norm)
-    <-  .print("design plan: ", modify(object, N));
++!designed(modify(object, N), Id, modified(Cond, Cons))
+    <-  .print("DESIGN PLAN by ", modify(object, N));
 
         !designedObject(Vl);
-        !designedNorm(n, object, Vl, Cond, Cons);
+        !designedNorm(Id, object, Vl, Cond, Cons);
 
-        .concat("norm ", N1, " : ", Cond, " -> ", Cons, " .", Norm);
-        .print("designed norm: ", Norm);
-        +designed(modify(object, N), n, Norm);
+        .print("designed: ", modified(Cond, Cons));
+        +designed(modify("object", N), Id, modified(Cond, Cons));
         .
 
 +!designedObject(X2) : vls(N, Vls) & sum(N, S)
@@ -76,10 +74,12 @@
 
 /** Execute plans **/
 
-+!executed(N1, designed(OP, Norm))
-    <-  .print("execute plan: ", executed(N1, designed(OP, Norm)));
-        adaptation.actions.modify_norm(N1, Norm);
-        +executed(N1, designed(OP, Norm));
++!executed(ID, designed(modify(O,X), modified(Cond, Cons)))
+    <-  .print("EXECUTE PLAN");
+        .concat("norm ", ID, " : ", Cond, " -> ", Cons, " .", Norm);
+        adaptation.actions.modify_norm(ID, Norm);
+        .print("EXECUTED ADAPTATION: ", Norm);
+        +executed(ID, designed(modify(O,X), Norm));
         .
 
 /** Normative facts **/
@@ -88,9 +88,9 @@
     <-  .print("specification: ", spec(TY,ID,COND,CONS));
         .
 
-+active(obligation(alice, M, executed(N1, designed(OP, Norm)), D))
-    <-  .print("active obligation: ", executed(designed(OP,N1,Ne)));
-        !executed(N1, designed(OP, Norm));
++active(obligation(alice, M, executed(ID, designed(OP, Norm)), D))
+    <-  .print("active obligation: ", executed(ID, designed(OP, Norm)));
+        !executed(ID, designed(OP, Norm));
         .
 
 +active(obligation(Me, M, What, D)) : .my_name(Me)

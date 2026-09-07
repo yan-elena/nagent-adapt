@@ -1,7 +1,6 @@
 package adaptation.agent;
 
-import jason.asSemantics.CircumstanceListener;
-import jason.asSemantics.Event;
+import jason.asSemantics.*;
 import jason.asSyntax.Atom;
 import jason.asSyntax.Literal;
 import jason.asSyntax.Trigger;
@@ -24,6 +23,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+
 
 /**
  * A normative agent that has a NPL normative and SAI constitutive reasoning module integrated in its mind.

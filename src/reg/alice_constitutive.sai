@@ -12,7 +12,5 @@ constitutive_rules:
 
 3: unfulfilled_count(n, N, Count) count-as design(alice, n, modify(object, N))  while Count>=3 .
 
-4: designed(OP, N1, Norm) count-as execute(alice, N1, designed(OP, Norm)) .
-
-
+4: designed(modify(O,X), ID, Norm) count-as execute(alice, ID, designed(modify(O,X), Norm)) .
 
