@@ -21,7 +21,7 @@ class NPLAInterpreterTest {
     void testAddNorm() {
         String specification = "norm n : order(N)[source(order)] & play(U, unit, _) -> obligation(U, n, completed(N, X)[source(U)] & X>5, deadlineOrder(N)) .";
 
-        this.addNorm(specification);
+        this.createNorm(specification);
 
         try {
             nplaEngine.addFact(ASSyntax.parseLiteral("play(unit1, unit, _)[source(alice)]"));
@@ -42,7 +42,7 @@ class NPLAInterpreterTest {
     void testModifyNorm() {
         String specification = "norm n : order(N)[source(order)] & play(U, unit, _) -> obligation(U, n, completed(N, X)[source(U)] & X>5, deadlineOrder(N)) .";
 
-        this.addNorm(specification);
+        this.createNorm(specification);
 
         try {
             nplaEngine.modifyNorm("n", "norm n : order(N)[source(order)] & play(U, unit, _) -> obligation(U, n, completed(N, X)[source(U)] & X>3, deadlineOrder(N)) .");
@@ -86,10 +86,10 @@ class NPLAInterpreterTest {
     }
 
 
-    private void addNorm(String specification) {
+    private void createNorm(String specification) {
         try {
             INorm norm = nplFactory.parseNorm(specification, null);
-            nplaEngine.addNorm(norm);
+            nplaEngine.createNorm(norm);
 
             assertTrue(nplaEngine.getRegulativeNorms().containsKey("n"));
             assertEquals(1, nplaEngine.getRegulativeNorms().size());

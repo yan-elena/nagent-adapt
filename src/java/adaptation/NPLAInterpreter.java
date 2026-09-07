@@ -35,9 +35,9 @@ public class NPLAInterpreter extends NPLInterpreter {
      * @param consequence the failure or deontic consequence of the norm
      * @param activation  the activation condition of the norm
      */
-    public void addNorm(String id, Literal consequence, LogicalFormula activation) {
+    public void createNorm(String id, Literal consequence, LogicalFormula activation) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
-        this.addNorm(norm.getId(), norm.getConsequence(), norm.getCondition(), norm.ifFulfilledSanction(), norm.ifUnfulfilledSanction(), norm.ifInactiveSanction());
+        this.createNorm(norm.getId(), norm.getConsequence(), norm.getCondition(), norm.ifFulfilledSanction(), norm.ifUnfulfilledSanction(), norm.ifInactiveSanction());
     }
 
     /**
@@ -50,7 +50,7 @@ public class NPLAInterpreter extends NPLInterpreter {
      * @param unfulfilled the triggering sanction rule if unfulfilled
      * @param inactive    the triggering sanction rule if inactive
      */
-    public void addNorm(String id, Literal consequence, LogicalFormula condition, List<Literal> fulfilled, List<Literal> unfulfilled, List<Literal> inactive) {
+    public void createNorm(String id, Literal consequence, LogicalFormula condition, List<Literal> fulfilled, List<Literal> unfulfilled, List<Literal> inactive) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, condition);
         // check if not null and if the sanction rule is already present in the list
         if (fulfilled != null && !fulfilled.isEmpty() && sanctionRules.stream().anyMatch(s -> s.getTrigger().equals(fulfilled))) {
@@ -77,9 +77,9 @@ public class NPLAInterpreter extends NPLInterpreter {
      *
      * @param specification the id of the norm
      */
-    public void addNorm(String specification) throws Exception {
+    public void createNorm(String specification) throws Exception {
         final INorm norm = this.parseNorm(specification);
-        this.addNorm(norm.getId(), norm.getConsequence(), norm.getCondition(), norm.ifFulfilledSanction(), norm.ifUnfulfilledSanction(), norm.ifInactiveSanction());
+        this.createNorm(norm.getId(), norm.getConsequence(), norm.getCondition(), norm.ifFulfilledSanction(), norm.ifUnfulfilledSanction(), norm.ifInactiveSanction());
     }
 
     /**

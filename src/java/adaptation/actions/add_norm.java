@@ -28,12 +28,12 @@ public class add_norm extends DefaultInternalAction {
                 LogicalFormula condition = (LogicalFormula) args[1];
                 Literal consequence = (Literal) args[2];
                 ag.getLogger().info("[Action] Add new norm - id: " + id + " condition: " + condition + " consequence: " + consequence);
-                ag.getNPLAInterpreter().addNorm(id.getString(), consequence, condition);
+                ag.getNPLAInterpreter().createNorm(id.getString(), consequence, condition);
             } else if (args.length == 1) {
                 StringTerm term = (StringTerm) args[0];
                 String norm = term.toString().substring(1, term.length() - 1);
                 ag.getLogger().info("[Action] Add new " + " norm: " + norm);
-                ag.getNPLAInterpreter().addNorm(norm);
+                ag.getNPLAInterpreter().createNorm(norm);
             }
             ag.getNPLAInterpreter().verifyNorms();
             return true;
