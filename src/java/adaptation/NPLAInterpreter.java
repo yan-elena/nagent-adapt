@@ -1,5 +1,6 @@
 package adaptation;
 
+import jason.asSemantics.Unifier;
 import jason.asSyntax.Literal;
 import jason.asSyntax.LogicalFormula;
 import npl.*;
@@ -15,9 +16,18 @@ public class NPLAInterpreter extends NPLInterpreter {
     private final NPLFactory nplFactory;
     private final List<NPLAListener> listeners;
 
+    private StateTransitions oblTransitions;
+
     public NPLAInterpreter() {
         nplFactory = new NPLFactory();
         listeners = new ArrayList<>();
+    }
+
+    @Override
+    public void init() {
+        this.oblTransitions = new StateTransitionsThread(this, 1000);
+        this.setStateManager(oblTransitions);
+        super.init();
     }
 
     /**
@@ -140,7 +150,7 @@ public class NPLAInterpreter extends NPLInterpreter {
      * @param condition   the activation condition
      * @param consequence the sanction fact
      */
-    public void addSanctionRule(Literal trigger, LogicalFormula condition, Literal consequence) throws ParseException {
+    public void createSanctionRule(Literal trigger, LogicalFormula condition, Literal consequence) throws ParseException {
         final ISanctionRule sanctionRule = this.nplFactory.createSanctionRule(trigger, condition, consequence);
         this.listeners.forEach(l -> l.createdNorm(NormType.SANCTION, sanctionRule.getTrigger().toString(), sanctionRule.getCondition(), sanctionRule.getConsequence()));
         sanctionRules.add(sanctionRule);
@@ -166,6 +176,34 @@ public class NPLAInterpreter extends NPLInterpreter {
     public void removeSanctionRule(Literal trigger) {
         sanctionRules.removeIf(s -> s.getTrigger().equals(trigger));
     }
+
+
+    public void createNormInstance(Literal l, Unifier un, INorm n) {
+        NormInstance ni = new NormInstance(l, un, n);
+        ni.setActive();
+        this.oblTransitions.addInSchedule(ni);
+        this.allActivatedNorms.add(n.getId() + un.toString());
+    }
+
+    public void removeNormInstance(Literal l, Unifier un, INorm n) {
+        NormInstance ni = new NormInstance(l, un, n);
+
+//        this.oblTransitions.addInSchedule(ni);
+        this.allActivatedNorms.remove(n.getId() + un.toString());
+    }
+
+    public void modifyNormInstance(Literal oldCons, Literal newCons, Unifier un, INorm n) {
+        NormInstance niOld = new NormInstance(oldCons, un, n);
+        NormInstance ni = new NormInstance(newCons, un, n);
+        ni.setActive();
+        this.oblTransitions.addInSchedule(ni);
+        this.allActivatedNorms.add(n.getId() + un.toString());
+    }
+
+    public void createNormInstance(String specId, String unifier) {
+        this.allActivatedNorms.add(specId + unifier);
+    }
+
 
     /**
      * Retrieves the map of regulative norms.
