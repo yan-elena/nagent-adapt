@@ -42,25 +42,25 @@ public class NPLAInterpreter extends NPLInterpreter {
      * Adds a new regulative norm in the interpreter.
      *
      * @param id          the id of the norm
-     * @param consequence the failure or deontic consequence of the norm
      * @param activation  the activation condition of the norm
+     * @param consequence the failure or deontic consequence of the norm
      */
-    public void createNorm(String id, Literal consequence, LogicalFormula activation) {
+    public void createNorm(String id, LogicalFormula activation, Literal consequence) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
-        this.createNorm(norm.getId(), norm.getConsequence(), norm.getCondition(), norm.ifFulfilledSanction(), norm.ifUnfulfilledSanction(), norm.ifInactiveSanction());
+        this.createNorm(norm.getId(), norm.getCondition(), norm.getConsequence(), norm.ifFulfilledSanction(), norm.ifUnfulfilledSanction(), norm.ifInactiveSanction());
     }
 
     /**
      * Adds a new regulative norm in the interpreter.
      *
      * @param id          the id of the norm
-     * @param consequence the failure or deontic consequence of the norm
      * @param condition   the condition of the norm
+     * @param consequence the failure or deontic consequence of the norm
      * @param fulfilled   the triggering sanction rule if fulfilled
      * @param unfulfilled the triggering sanction rule if unfulfilled
      * @param inactive    the triggering sanction rule if inactive
      */
-    public void createNorm(String id, Literal consequence, LogicalFormula condition, List<Literal> fulfilled, List<Literal> unfulfilled, List<Literal> inactive) {
+    public void createNorm(String id, LogicalFormula condition, Literal consequence, List<Literal> fulfilled, List<Literal> unfulfilled, List<Literal> inactive) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, condition);
         // check if not null and if the sanction rule is already present in the list
         if (fulfilled != null && !fulfilled.isEmpty() && sanctionRules.stream().anyMatch(s -> s.getTrigger().equals(fulfilled))) {
@@ -89,19 +89,30 @@ public class NPLAInterpreter extends NPLInterpreter {
      */
     public void createNorm(String specification) throws Exception {
         final INorm norm = this.parseNorm(specification);
-        this.createNorm(norm.getId(), norm.getConsequence(), norm.getCondition(), norm.ifFulfilledSanction(), norm.ifUnfulfilledSanction(), norm.ifInactiveSanction());
+        this.createNorm(norm.getId(), norm.getCondition(), norm.getConsequence(), norm.ifFulfilledSanction(), norm.ifUnfulfilledSanction(), norm.ifInactiveSanction());
     }
 
     /**
      * Modifies an existing regulative norm with new parameters in the interpreter.
      *
      * @param id          the id of the existing norm
-     * @param consequence the failure or deontic consequence of the norm
      * @param activation  the activation condition of the norm
+     * @param consequence the failure or deontic consequence of the norm
+     * @param fulfilled   the triggering sanction rule if fulfilled
+     * @param unfulfilled the triggering sanction rule if unfulfilled
+     * @param inactive    the triggering sanction rule if inactive
      * @throws NullPointerException if the specified id is not present in the set of norms
      */
-    public void modifyNorm(String id, Literal consequence, LogicalFormula activation) {
+    public void modifyNorm(String id, LogicalFormula activation, Literal consequence, List<Literal> fulfilled, List<Literal> unfulfilled, List<Literal> inactive) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
+        fulfilled.forEach(norm::addFulfilledSanction);
+        unfulfilled.forEach(norm::addUnfulfilledSanction);
+        inactive.forEach(norm::addInactiveSanction);
+
+        this.modify(id, norm);
+    }
+
+    private void modify(String id, INorm norm) {
         Optional<INorm> replaced = Optional.empty();
         Optional<NormType> type = Optional.empty();
         if (norm.getConsequence().getFunctor().equals("fail")) {
@@ -120,7 +131,20 @@ public class NPLAInterpreter extends NPLInterpreter {
             replaced.ifPresent(old -> this.listeners.forEach(l -> l.removedNorm(t, old.getId(), old.getCondition(), old.getConsequence())));
             this.listeners.forEach(l -> l.createdNorm(t, norm.getId(), norm.getCondition(), norm.getConsequence()));
         }
-        }
+    }
+
+    /**
+     * Modifies an existing regulative norm with new parameters in the interpreter.
+     *
+     * @param id          the id of the existing norm
+     * @param activation  the activation condition of the norm
+     * @param consequence the failure or deontic consequence of the norm
+     * @throws NullPointerException if the specified id is not present in the set of norms
+     */
+    public void modifyNorm(String id, LogicalFormula activation, Literal consequence) {
+        final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
+        modify(id, norm);
+    }
 
     /**
      * Adds a new regulative norm in the interpreter.
@@ -130,7 +154,7 @@ public class NPLAInterpreter extends NPLInterpreter {
      */
     public void modifyNorm(String id, String specification) throws Exception {
         final INorm norm = parseNorm(specification);
-        this.modifyNorm(id, norm.getConsequence(), norm.getCondition());
+        this.modifyNorm(id, norm.getCondition(), norm.getConsequence());
     }
 
     /**
@@ -178,32 +202,49 @@ public class NPLAInterpreter extends NPLInterpreter {
     }
 
 
-    public void createNormInstance(Literal l, Unifier un, INorm n) {
-        NormInstance ni = new NormInstance(l, un, n);
+    /**
+     * Creates a new norm instance in the interpreter.
+     * @param consequence the consequence of the norm instance
+     * @param un the unifier of the norm instance
+     * @param n the norm specification of the norm instance
+     */
+    public void createNormInstance(Literal consequence, Unifier un, INorm n) {
+        NormInstance ni = new NormInstance(consequence, un, n);
         ni.setActive();
         this.oblTransitions.addInSchedule(ni);
         this.allActivatedNorms.add(n.getId() + un.toString());
     }
 
-    public void removeNormInstance(Literal l, Unifier un, INorm n) {
-        NormInstance ni = new NormInstance(l, un, n);
-
-//        this.oblTransitions.addInSchedule(ni);
+    /**
+     * Removes an existing norm instance in the interpreter.
+     * @param consequence the consequence of the norm instance
+     * @param un the unifier of the norm instance
+     * @param n the norm specification of the norm instance
+     */
+    public void removeNormInstance(Literal consequence, Unifier un, INorm n) {
         this.allActivatedNorms.remove(n.getId() + un.toString());
     }
 
+    /**
+     * Modifies an existing norm instance in the interpreter.
+     * @param oldCons the old consequence of the norm instance
+     * @param newCons the new consequence of the norm instance
+     * @param un the unifier of the norm instance
+     * @param n the norm specification of the norm instance
+     */
     public void modifyNormInstance(Literal oldCons, Literal newCons, Unifier un, INorm n) {
-        NormInstance niOld = new NormInstance(oldCons, un, n);
-        NormInstance ni = new NormInstance(newCons, un, n);
-        ni.setActive();
-        this.oblTransitions.addInSchedule(ni);
-        this.allActivatedNorms.add(n.getId() + un.toString());
+        this.removeNormInstance(oldCons, un, n);
+        this.createNormInstance(newCons, un, n);
     }
 
+    /**
+     * Creates a new norm instance in the interpreter.
+     * @param specId the id of the norm specification
+     * @param unifier the unifier of the norm instance
+     */
     public void createNormInstance(String specId, String unifier) {
         this.allActivatedNorms.add(specId + unifier);
     }
-
 
     /**
      * Retrieves the map of regulative norms.
@@ -233,8 +274,6 @@ public class NPLAInterpreter extends NPLInterpreter {
     }
 
     private INorm parseNorm(String specification) throws Exception {
-//        Pattern pattern = Pattern.compile("(?<![a-z])_(\\d+)");
-//        String norm = pattern.matcher(specification).replaceAll("Var$1");
         return this.nplFactory.parseNorm(specification.replaceAll("((_)(\\d)+(Var)?)+", "Var"), null);
     }
 

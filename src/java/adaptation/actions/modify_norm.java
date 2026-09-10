@@ -11,6 +11,8 @@ import jason.asSyntax.StringTerm;
 import jason.asSyntax.Term;
 import npl.parser.ParseException;
 
+import java.util.List;
+
 /**
  * An internal action for modify an existing norm in the normative engine of the agent.
  * The following parameters are required:
@@ -31,12 +33,20 @@ public class modify_norm extends DefaultInternalAction {
                 LogicalFormula condition = (LogicalFormula) args[1];
                 Literal consequence = (Literal) args[2];
                 ag.getLogger().info("[Action] Modify norm - id: " + id + " with condition: " + condition + " consequence: " + consequence);
-                ag.getNPLAInterpreter().modifyNorm(id.toString(), consequence, condition);
+                ag.getNPLAInterpreter().modifyNorm(id.toString(), condition, consequence);
             } else if (args.length == 2) {
                 StringTerm term = (StringTerm) args[1];
                 String norm = term.toString().substring(1, term.length() - 1);
                 ag.getLogger().info("[Action] Modify norm - id: " + id + " with a new norm: " + norm);
                 ag.getNPLAInterpreter().modifyNorm(id.toString(), norm);
+            } else if (args.length == 6) {
+                LogicalFormula condition = (LogicalFormula) args[1];
+                Literal consequence = (Literal) args[2];
+                List<Literal> fulfilled = (List<Literal>) args[3];
+                List<Literal> unfulfilled = (List<Literal>) args[4];
+                List<Literal> inactive = (List<Literal>) args[5];
+                ag.getNPLAInterpreter().modifyNorm(id.toString(), condition, consequence, fulfilled, unfulfilled, inactive);
+                ag.getLogger().info("[Action] Modify norm - id: " + id + " with condition: " + condition + " consequence: " + consequence + " fulfilled: " + fulfilled + " unfulfilled: " + unfulfilled + " inactive: " + inactive);
             }
             ag.getNPLAInterpreter().verifyNorms();
             return true;

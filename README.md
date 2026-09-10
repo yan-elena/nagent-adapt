@@ -22,7 +22,7 @@ The class `ANormativeAgentSAI` is the extended Jason normative agent architectur
 
 The directory `src/java/actions` provides Jason internal operations for regulation adaptation. Available operations are:
 
-- `add_norm`
+- `create_norm`
 - `add_sanction_rule`
 - `modify_norm`
 - `modify_sanction_rule`
