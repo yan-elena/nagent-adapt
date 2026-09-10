@@ -94,19 +94,21 @@ public class NormativeAgentSAI extends NormativeAg implements CircumstanceListen
             event.setTerm(0, consequence);
         }
 
-        //todo: consider everything that is not "self"
         if (type.equals(Trigger.TEType.belief)) {
-            final Trigger.TEOperator operator = trigger.getOperator();
-            try {
-                if (operator.equals(Trigger.TEOperator.add)) {
-                    // a new belief or a perception is added as environmental property in SAI
-                    saiEngine.addEnvironmentalProperty(event);
-                } else if (operator.equals(Trigger.TEOperator.del)) {
-                    // when the belief is removed, then remove it also as brute fact
-                    saiEngine.addEnvironmentalProperty(event);
+            // the belief should not be an internal belief
+            if (!event.getSources().stream().allMatch(s -> s.toString().equals("self"))) {
+                final Trigger.TEOperator operator = trigger.getOperator();
+                try {
+                    if (operator.equals(Trigger.TEOperator.add)) {
+                        // a new belief or a perception is added as environmental property in SAI
+                        saiEngine.addEnvironmentalProperty(event);
+                    } else if (operator.equals(Trigger.TEOperator.del)) {
+                        // when the belief is removed, then remove it also as brute fact
+                        saiEngine.addEnvironmentalProperty(event);
+                    }
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
                 }
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
             }
         } else if (type.equals(Trigger.TEType.signal)) {
             try {
