@@ -20,7 +20,7 @@
             .wait(1000);
             .print("execute in ", 10-I, " seconds");
         }
-        adaptation.actions.modify_norm(NID, Norm);
+        adaptation.actions.modify_norm(NID, Cond, Cons);
         .print("EXECUTED ADAPTATION: ", Norm);
         +executed(ID, NID, designed(modify, subject, X)); //obligation fulfilled
         .
