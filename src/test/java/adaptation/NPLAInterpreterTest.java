@@ -1,11 +1,13 @@
 package adaptation;
 
 import jason.asSyntax.ASSyntax;
+import jason.asSyntax.Literal;
 import npl.INorm;
 import npl.NPLFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static jason.asSyntax.ASSyntax.parseLiteral;
 import static org.junit.jupiter.api.Assertions.*;
 
 class NPLAInterpreterTest {
@@ -24,8 +26,8 @@ class NPLAInterpreterTest {
         this.createNorm(specification);
 
         try {
-            nplaEngine.addFact(ASSyntax.parseLiteral("play(unit1, unit, _)[source(alice)]"));
-            nplaEngine.addFact(ASSyntax.parseLiteral("order(1)[source(order)]"));
+            nplaEngine.addFact(parseLiteral("play(unit1, unit, _)[source(alice)]"));
+            nplaEngine.addFact(parseLiteral("order(1)[source(order)]"));
 
             nplaEngine.verifyNorms();
             nplaEngine.verifyNorms();
@@ -60,8 +62,8 @@ class NPLAInterpreterTest {
 
         try {
             // add facts
-            nplaEngine.addFact(ASSyntax.parseLiteral("play(unit1, unit, _)[source(alice)]"));
-            nplaEngine.addFact(ASSyntax.parseLiteral("order(1)[source(order)]"));
+            nplaEngine.addFact(parseLiteral("play(unit1, unit, _)[source(alice)]"));
+            nplaEngine.addFact(parseLiteral("order(1)[source(order)]"));
 
             nplaEngine.verifyNorms();
             nplaEngine.verifyNorms();
@@ -74,12 +76,54 @@ class NPLAInterpreterTest {
 
         try {
             // norm fulfilled
-            nplaEngine.addFact(ASSyntax.parseLiteral("completed(1, 4)[source(unit1)]"));
+            nplaEngine.addFact(parseLiteral("completed(1, 4)[source(unit1)]"));
 
             nplaEngine.verifyNorms();
             nplaEngine.verifyNorms();
 
             assertTrue(nplaEngine.getFulfilledObligations().stream().anyMatch(n -> n.toString().contains("n")));
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
+
+    @Test
+    void testModifyNormCondition() {
+        String specification = "norm n : order(N)[source(order)] & play(U, unit, _) -> obligation(U, n, completed(N, X)[source(U)] & X>5, deadlineOrder(N)) .";
+
+        this.createNorm(specification);
+
+        try {
+            nplaEngine.modifyNorm("n", parseLiteral("bottleneck(X)"), parseLiteral("obligation(U, n, completed(N, X)[source(U)] & X>5, deadlineOrder(N))"));
+
+            nplaEngine.verifyNorms();
+            nplaEngine.verifyNorms();
+
+
+        } catch (Exception e) {
+            fail(e);
+        }
+
+        try {
+            // add facts
+            nplaEngine.addFact(parseLiteral("bottleneck(10)"));
+
+            nplaEngine.verifyNorms();
+            nplaEngine.verifyNorms();
+        } catch (Exception e) {
+            fail(e);
+        }
+
+        // norm activated
+        assertTrue(nplaEngine.getActivatedNorms().stream().anyMatch(n -> n.contains("n")));
+
+        try {
+            // norm fulfilled
+
+            nplaEngine.verifyNorms();
+            nplaEngine.verifyNorms();
+
+            assertTrue(nplaEngine.getActivatedNorms().stream().anyMatch(n -> n.toString().contains("n")));
         } catch (Exception e) {
             fail(e);
         }
