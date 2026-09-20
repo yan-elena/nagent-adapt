@@ -10,6 +10,9 @@ import npl.parser.ParseException;
 import ora4mas.nopl.NormativeBoard;
 import ora4mas.nopl.WebInterface;
 
+import static jason.asSyntax.ASSyntax.parseFormula;
+import static jason.asSyntax.ASSyntax.parseLiteral;
+
 public class AdaptiveNormativeBoard extends NormativeBoard {
 
         @Override
@@ -40,13 +43,21 @@ public class AdaptiveNormativeBoard extends NormativeBoard {
         }
 
         @OPERATION
-        public void createNorm(String id, LogicalFormula activation, Literal consequence) {
-            ((NPLAInterpreter) this.nengine).createNorm(id, activation, consequence);
+        public void createNorm(String id, String activation, String consequence) {
+            try {
+                ((NPLAInterpreter) this.nengine).createNorm(id, parseFormula(activation), parseLiteral(consequence));
+            } catch (jason.asSyntax.parser.ParseException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         @OPERATION
-        public void modifyNorm(String id, LogicalFormula activation, Literal consequence) {
-            ((NPLAInterpreter) this.nengine).modifyNorm(id, activation, consequence);
+        public void modifyNorm(String id, String activation, String consequence) {
+            try {
+                ((NPLAInterpreter) this.nengine).modifyNorm(id, parseFormula(activation), parseLiteral(consequence));
+            } catch (jason.asSyntax.parser.ParseException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         @OPERATION
@@ -55,25 +66,29 @@ public class AdaptiveNormativeBoard extends NormativeBoard {
         }
 
         @OPERATION
-        public void createSanctionRule(Literal trigger, LogicalFormula activation, Literal consequence) {
+        public void createSanctionRule(String trigger, String activation, String consequence) {
             try {
-                ((NPLAInterpreter) this.nengine).createSanctionRule(trigger, activation, consequence);
-            } catch (ParseException e) {
+                ((NPLAInterpreter) this.nengine).createSanctionRule(parseLiteral(trigger), parseFormula(activation), parseLiteral(consequence));
+            } catch (ParseException | jason.asSyntax.parser.ParseException e) {
                 throw new RuntimeException(e);
             }
         }
 
         @OPERATION
-        public void modifySanctionRule(Literal trigger, LogicalFormula activation, Literal consequence) {
+        public void modifySanctionRule(String trigger, String activation, String consequence) {
             try {
-                ((NPLAInterpreter) this.nengine).modifySanctionRule(trigger, activation, consequence);
-            } catch (ParseException e) {
+                ((NPLAInterpreter) this.nengine).modifySanctionRule(parseLiteral(trigger), parseFormula(activation), parseLiteral(consequence));
+            } catch (ParseException | jason.asSyntax.parser.ParseException e) {
                 throw new RuntimeException(e);
             }
         }
 
         @OPERATION
-        public void removeSanctionRule(Literal trigger) {
-            ((NPLAInterpreter) this.nengine).removeSanctionRule(trigger);
+        public void removeSanctionRule(String trigger) {
+            try {
+                ((NPLAInterpreter) this.nengine).removeSanctionRule(parseLiteral(trigger));
+            } catch (jason.asSyntax.parser.ParseException e) {
+                throw new RuntimeException(e);
+            }
         }
 }
