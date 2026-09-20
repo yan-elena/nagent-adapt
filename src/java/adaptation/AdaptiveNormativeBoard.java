@@ -1,9 +1,11 @@
 package adaptation;
 
 import cartago.OPERATION;
+import cartago.OpFeedbackParam;
 import jason.asSyntax.Literal;
 import jason.asSyntax.LogicalFormula;
 import jason.util.Config;
+import npl.INorm;
 import npl.parser.ParseException;
 import ora4mas.nopl.NormativeBoard;
 import ora4mas.nopl.WebInterface;
@@ -28,6 +30,13 @@ public class AdaptiveNormativeBoard extends NormativeBoard {
             }
 
             normBoards.add(this);
+        }
+
+        @OPERATION
+        public void getNorm(String id, OpFeedbackParam<LogicalFormula> activation, OpFeedbackParam<Literal> consequence) {
+            INorm norm = this.nengine.getNorm(id);
+            activation.set(norm.getCondition());
+            consequence.set(norm.getConsequence());
         }
 
         @OPERATION
