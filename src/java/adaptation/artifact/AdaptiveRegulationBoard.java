@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class AdaptiveNormativeBoardSai extends AdaptiveNormativeBoard {
+public class AdaptiveRegulationBoard extends AdaptiveNormativeBoard {
 
     private Npl2Sai npl2sai;
     private SaiEngine institution;
@@ -50,7 +50,6 @@ public class AdaptiveNormativeBoardSai extends AdaptiveNormativeBoard {
             e.printStackTrace();
             throw e;
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

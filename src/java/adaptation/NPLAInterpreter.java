@@ -44,10 +44,12 @@ public class NPLAInterpreter extends NPLInterpreter {
      * @param id          the id of the norm
      * @param activation  the activation condition of the norm
      * @param consequence the failure or deontic consequence of the norm
+     * @return norm       the created norm
      */
-    public void createNorm(String id, LogicalFormula activation, Literal consequence) {
+    public INorm createNorm(String id, LogicalFormula activation, Literal consequence) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
         this.createNorm(norm.getId(), norm.getCondition(), norm.getConsequence(), norm.ifFulfilledSanction(), norm.ifUnfulfilledSanction(), norm.ifInactiveSanction());
+        return norm;
     }
 
     /**
@@ -139,11 +141,13 @@ public class NPLAInterpreter extends NPLInterpreter {
      * @param id          the id of the existing norm
      * @param activation  the activation condition of the norm
      * @param consequence the failure or deontic consequence of the norm
+     * @return norm       the modified norm
      * @throws NullPointerException if the specified id is not present in the set of norms
      */
-    public void modifyNorm(String id, LogicalFormula activation, Literal consequence) {
+    public INorm modifyNorm(String id, LogicalFormula activation, Literal consequence) {
         final INorm norm = this.nplFactory.createNorm(id, consequence, activation);
         modify(id, norm);
+        return norm;
     }
 
     /**

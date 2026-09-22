@@ -46,8 +46,9 @@ public class AdaptiveNormativeBoard extends NormativeBoard {
         @OPERATION
         public void createNorm(String id, String activation, String consequence) {
             try {
-                ((NPLAInterpreter) this.nengine).createNorm(id, parseFormula(activation), parseLiteral(consequence));
-            } catch (jason.asSyntax.parser.ParseException e) {
+                INorm norm = ((NPLAInterpreter) this.nengine).createNorm(id, parseFormula(activation), parseLiteral(consequence));
+                gui.setSpecification(norm.toString());
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
@@ -55,8 +56,9 @@ public class AdaptiveNormativeBoard extends NormativeBoard {
         @OPERATION
         public void modifyNorm(String id, String activation, String consequence) {
             try {
-                ((NPLAInterpreter) this.nengine).modifyNorm(id, parseFormula(activation), parseLiteral(consequence));
-            } catch (jason.asSyntax.parser.ParseException e) {
+                INorm norm = ((NPLAInterpreter) this.nengine).modifyNorm(id, parseFormula(activation), parseLiteral(consequence));
+                gui.setSpecification(norm.toString());
+            } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
