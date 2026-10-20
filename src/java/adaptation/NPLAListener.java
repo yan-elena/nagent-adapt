@@ -15,7 +15,7 @@ public interface NPLAListener {
      * @param condition the condition of the norm
      * @param consequence the consequence of the norm
      */
-    void createdNorm(NormType type, String id, LogicalFormula condition, Literal consequence);
+    void createRegulativeNorm(NormType type, String id, LogicalFormula condition, Literal consequence);
 
     /**
      * A norm is removed.
@@ -24,5 +24,5 @@ public interface NPLAListener {
      * @param condition the condition of the norm
      * @param consequence the consequence of the norm
      */
-    void removedNorm(NormType type, String id, LogicalFormula condition, Literal consequence);
+    void removeRegulativeNorm(NormType type, String id, LogicalFormula condition, Literal consequence);
 }

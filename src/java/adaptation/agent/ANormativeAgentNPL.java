@@ -76,7 +76,7 @@ public class ANormativeAgentNPL extends NormativeAg implements ANormativeAgent, 
     }
 
     @Override
-    public void createdNorm(NormType type, String id, LogicalFormula condition, Literal consequence) {
+    public void createRegulativeNorm(NormType type, String id, LogicalFormula condition, Literal consequence) {
         List<Term> structure = List.of(condition, consequence);
         try {
             this.addBel(normToSpecification(type, id, structure));
@@ -86,7 +86,7 @@ public class ANormativeAgentNPL extends NormativeAg implements ANormativeAgent, 
     }
 
     @Override
-    public void removedNorm(NormType type, String id, LogicalFormula condition, Literal consequence) {
+    public void removeRegulativeNorm(NormType type, String id, LogicalFormula condition, Literal consequence) {
         List<Term> structure = List.of(condition, consequence);
         try {
             this.delBel(normToSpecification(type, id, structure));

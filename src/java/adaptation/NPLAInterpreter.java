@@ -77,10 +77,10 @@ public class NPLAInterpreter extends NPLInterpreter {
         // check if it is regulative or regimented norm
         if (norm.getConsequence().getFunctor().equals("fail")) {
             this.regimentedNorms.put(id, norm);
-            this.listeners.forEach(l -> l.createdNorm(NormType.REGIMENTED, norm.getId(), norm.getCondition(), norm.getConsequence()));
+            this.listeners.forEach(l -> l.createRegulativeNorm(NormType.REGIMENTED, norm.getId(), norm.getCondition(), norm.getConsequence()));
         } else {
             this.regulativeNorms.put(id, norm);
-            this.listeners.forEach(l -> l.createdNorm(NormType.REGULATIVE, norm.getId(), norm.getCondition(), norm.getConsequence()));
+            this.listeners.forEach(l -> l.createRegulativeNorm(NormType.REGULATIVE, norm.getId(), norm.getCondition(), norm.getConsequence()));
         }
     }
 
@@ -130,8 +130,8 @@ public class NPLAInterpreter extends NPLInterpreter {
         }
         if (replaced.isPresent()) {
             NormType t = type.get();
-            replaced.ifPresent(old -> this.listeners.forEach(l -> l.removedNorm(t, old.getId(), old.getCondition(), old.getConsequence())));
-            this.listeners.forEach(l -> l.createdNorm(t, norm.getId(), norm.getCondition(), norm.getConsequence()));
+            replaced.ifPresent(old -> this.listeners.forEach(l -> l.removeRegulativeNorm(t, old.getId(), old.getCondition(), old.getConsequence())));
+            this.listeners.forEach(l -> l.createRegulativeNorm(t, norm.getId(), norm.getCondition(), norm.getConsequence()));
         }
     }
 
@@ -168,7 +168,7 @@ public class NPLAInterpreter extends NPLInterpreter {
      */
     public void removeNorm(String id) {
         INorm norm = regulativeNorms.remove(id);
-        this.listeners.forEach(l -> l.removedNorm(NormType.REGULATIVE, norm.getId(), norm.getCondition(), norm.getConsequence()));
+        this.listeners.forEach(l -> l.removeRegulativeNorm(NormType.REGULATIVE, norm.getId(), norm.getCondition(), norm.getConsequence()));
     }
 
     /**
@@ -180,7 +180,7 @@ public class NPLAInterpreter extends NPLInterpreter {
      */
     public void createSanctionRule(Literal trigger, LogicalFormula condition, Literal consequence) throws ParseException {
         final ISanctionRule sanctionRule = this.nplFactory.createSanctionRule(trigger, condition, consequence);
-        this.listeners.forEach(l -> l.createdNorm(NormType.SANCTION, sanctionRule.getTrigger().toString(), sanctionRule.getCondition(), sanctionRule.getConsequence()));
+        this.listeners.forEach(l -> l.createRegulativeNorm(NormType.SANCTION, sanctionRule.getTrigger().toString(), sanctionRule.getCondition(), sanctionRule.getConsequence()));
         sanctionRules.add(sanctionRule);
     }
 
