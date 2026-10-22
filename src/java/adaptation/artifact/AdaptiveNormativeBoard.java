@@ -1,6 +1,6 @@
 package adaptation.artifact;
 
-import adaptation.NPLAInterpreter;
+import adaptation.engine.NPLAInterpreter;
 import cartago.OPERATION;
 import cartago.OpFeedbackParam;
 import jason.asSyntax.Literal;

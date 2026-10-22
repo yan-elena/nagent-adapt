@@ -1,6 +1,7 @@
 package adaptation.agent;
 
-import adaptation.NPLAInterpreter;
+import adaptation.engine.NPLAInterpreter;
+import sai.main.lang.semantics.statusFunction.StatusFunction;
 
 import java.util.logging.Logger;
 
@@ -25,4 +26,5 @@ public interface ANormativeAgent {
      * Load the normative specifications to the agent's belief base.
      */
     void loadSpecification();
+
 }

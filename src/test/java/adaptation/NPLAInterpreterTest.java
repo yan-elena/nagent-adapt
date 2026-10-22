@@ -1,7 +1,6 @@
 package adaptation;
 
-import jason.asSyntax.ASSyntax;
-import jason.asSyntax.Literal;
+import adaptation.engine.NPLAInterpreter;
 import npl.INorm;
 import npl.NPLFactory;
 import org.junit.jupiter.api.BeforeEach;

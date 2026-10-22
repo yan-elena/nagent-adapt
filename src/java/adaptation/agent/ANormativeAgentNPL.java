@@ -1,7 +1,7 @@
 package adaptation.agent;
 
-import adaptation.NPLAInterpreter;
-import adaptation.NPLAListener;
+import adaptation.engine.NPLAInterpreter;
+import adaptation.engine.NPLAListener;
 import adaptation.NormType;
 import jason.JasonException;
 import jason.RevisionFailedException;

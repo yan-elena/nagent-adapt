@@ -1,18 +1,16 @@
 package adaptation.agent;
 
-import adaptation.NPLAInterpreter;
-import adaptation.NPLAListener;
+import adaptation.engine.NPLAInterpreter;
+import adaptation.engine.NPLAListener;
 import adaptation.NormType;
 import jason.JasonException;
 import jason.RevisionFailedException;
-import jason.asSyntax.Literal;
-import jason.asSyntax.LiteralImpl;
-import jason.asSyntax.LogicalFormula;
-import jason.asSyntax.Term;
+import jason.asSyntax.*;
 import npl.INorm;
 import npl.ISanctionRule;
 import npl.NPLFactory;
 import sai.main.lang.semantics.constitutiveRule.ConstitutiveRule;
+import sai.main.lang.semantics.statusFunction.StatusFunction;
 
 import java.util.*;
 
@@ -96,6 +94,22 @@ public class ANormativeAgentSAI extends NormativeAgentSAI implements ANormativeA
             throw new RuntimeException(e);
         }
     }
+
+    public void createStatusFunction(StatusFunction sf) throws Exception {
+        saiEngine.getProgram().addStatusFunction(sf);
+    }
+
+//    public void removeStatusFunction(StatusFunction sf) throws Exception {
+//        saiEngine.getProgram().getStatusFunctions().removeIf(s -> s.equals(sf));
+//    }
+
+    public void createConstitutiveNorm(Pred x, StatusFunction y, LogicalFormula t, LogicalFormula m) throws Exception {
+        saiEngine.getProgram().addConstitutiveRule(new ConstitutiveRule(x, y, t, m));
+    }
+
+//    public void removeConstitutiveNorm(Pred x, StatusFunction y, LogicalFormula t, LogicalFormula m) throws Exception {
+//        saiEngine.getProgram().getConstitutiveRules().stream().filter(c -> !(c.getX().equals(x) && c.getY().equals(y) && c.getT().equals(t) && c.getM().equals(m)));
+//    }
 
     private Literal normToSpecification(NormType type, String id, List<Term> structure) {
         Literal specification = new LiteralImpl("spec");

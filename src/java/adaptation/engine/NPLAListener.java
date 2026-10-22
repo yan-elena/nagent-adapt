@@ -1,5 +1,6 @@
-package adaptation;
+package adaptation.engine;
 
+import adaptation.NormType;
 import jason.asSyntax.Literal;
 import jason.asSyntax.LogicalFormula;
 
