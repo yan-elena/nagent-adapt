@@ -1,5 +1,7 @@
 package adaptation.agent;
 
+import adaptation.engine.AInstProgram;
+import adaptation.engine.ASaiEngine;
 import adaptation.engine.NPLAInterpreter;
 import adaptation.engine.NPLAListener;
 import adaptation.NormType;
@@ -8,22 +10,23 @@ import jason.RevisionFailedException;
 import jason.asSyntax.*;
 import npl.INorm;
 import npl.ISanctionRule;
-import npl.NPLFactory;
+import sai.main.institution.ConstitutiveReasoner;
 import sai.main.lang.semantics.constitutiveRule.ConstitutiveRule;
 import sai.main.lang.semantics.statusFunction.StatusFunction;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * An extended normative agent with the capability to adapt regulations.
  */
 public class ANormativeAgentSAI extends NormativeAgentSAI implements ANormativeAgent, NPLAListener {
 
-    private final NPLFactory nplFactory;
-
     public ANormativeAgentSAI() {
         this.interpreter = new NPLAInterpreter();
-        this.nplFactory = new NPLFactory();
+        ConstitutiveReasoner envHandler = new ConstitutiveReasoner(new ConcurrentLinkedQueue<>());
+        AInstProgram program = new AInstProgram(envHandler.getReasoner());
+        this.saiEngine = new ASaiEngine(envHandler, program);
     }
 
     public NPLAInterpreter getNPLAInterpreter() {
@@ -99,17 +102,21 @@ public class ANormativeAgentSAI extends NormativeAgentSAI implements ANormativeA
         saiEngine.getProgram().addStatusFunction(sf);
     }
 
-//    public void removeStatusFunction(StatusFunction sf) throws Exception {
-//        saiEngine.getProgram().getStatusFunctions().removeIf(s -> s.equals(sf));
-//    }
-
-    public void createConstitutiveNorm(Pred x, StatusFunction y, LogicalFormula t, LogicalFormula m) throws Exception {
-        saiEngine.getProgram().addConstitutiveRule(new ConstitutiveRule(x, y, t, m));
+    public void removeStatusFunction(StatusFunction sf) throws Exception {
+        ((ASaiEngine) saiEngine).removeStatusFunction(sf);
     }
 
-//    public void removeConstitutiveNorm(Pred x, StatusFunction y, LogicalFormula t, LogicalFormula m) throws Exception {
-//        saiEngine.getProgram().getConstitutiveRules().stream().filter(c -> !(c.getX().equals(x) && c.getY().equals(y) && c.getT().equals(t) && c.getM().equals(m)));
-//    }
+    public void createConstitutiveNorm(ConstitutiveRule rule) throws Exception {
+        saiEngine.getProgram().addConstitutiveRule(rule);
+    }
+
+    public void modifyConstitutiveNorm(ConstitutiveRule oldRule, ConstitutiveRule newRule) throws Exception {
+        ((ASaiEngine) saiEngine).modifyConstitutiveRule(oldRule, newRule);
+    }
+
+    public void removeConstitutiveNorm(ConstitutiveRule rule) throws Exception {
+        ((ASaiEngine) saiEngine).removeConstitutiveRule(rule);
+    }
 
     private Literal normToSpecification(NormType type, String id, List<Term> structure) {
         Literal specification = new LiteralImpl("spec");

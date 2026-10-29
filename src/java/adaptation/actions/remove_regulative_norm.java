@@ -13,7 +13,7 @@ import jason.asSyntax.Term;
  * The following parameters are required:
  * +id : String, the id of the existing norm to be removed
  */
-public class remove_norm extends DefaultInternalAction {
+public class remove_regulative_norm extends DefaultInternalAction {
 
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {

@@ -121,6 +121,10 @@ public class NormativeAgentSAI extends NormativeAg implements CircumstanceListen
 
     }
 
+    public SaiEngine getSaiEngine() {
+        return saiEngine;
+    }
+
     private void loadSAIProgram(String fileName) throws IOException {
         CharStream input = CharStreams.fromFileName(fileName);
         sai_constitutiveLexer constLexer = new sai_constitutiveLexer(input);

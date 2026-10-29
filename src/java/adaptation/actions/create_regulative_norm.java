@@ -19,7 +19,7 @@ import java.util.List;
  * +condition : LogicalFormula, the condition of the new norm to be added
  * +consequence : Literal, the consequence of the new norm to be added
  */
-public class create_norm extends DefaultInternalAction {
+public class create_regulative_norm extends DefaultInternalAction {
 
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {

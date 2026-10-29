@@ -22,7 +22,7 @@ import java.util.List;
  * Or:
  * +norm : String, the norm specification as string
  */
-public class modify_norm extends DefaultInternalAction {
+public class modify_regulative_norm extends DefaultInternalAction {
 
     @Override
     public Object execute(TransitionSystem ts, Unifier un, Term[] args) throws Exception {
